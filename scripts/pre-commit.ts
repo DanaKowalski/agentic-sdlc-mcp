@@ -24,6 +24,14 @@ const CONFIG_PATTERNS = [
   /^llms\.txt$/,
 ];
 
+// These files are written by check:configs and sync:configs as metadata.
+// They must never trigger or block the drift check — doing so causes an
+// infinite loop where the hook re-writes them after staging.
+const IGNORE_PATTERNS = [
+  /^scripts\/last-checked\.json$/,
+  /^config\/config-sources\.json$/,
+];
+
 // Get staged file list via git — works identically on all platforms
 const gitResult = spawnSync("git", ["diff", "--cached", "--name-only"], {
   encoding: "utf8",
@@ -36,11 +44,14 @@ if (gitResult.error) {
 }
 
 const staged = gitResult.stdout.trim().split("\n").filter(Boolean);
-const hasConfigChange = staged.some((file) =>
-  CONFIG_PATTERNS.some((pattern) => pattern.test(file))
+
+const relevantStaged = staged.filter(
+  (file) =>
+    CONFIG_PATTERNS.some((pattern) => pattern.test(file)) &&
+    !IGNORE_PATTERNS.some((pattern) => pattern.test(file))
 );
 
-if (!hasConfigChange) {
+if (relevantStaged.length === 0) {
   process.exit(0);
 }
 
