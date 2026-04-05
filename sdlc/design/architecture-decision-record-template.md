@@ -1,83 +1,35 @@
 # ADR {{NUMBER}}: {{TITLE}}
 
-**Date**: {{DATE}}
-**Status**: Proposed | Accepted | Deprecated | Superseded by ADR-XXXX
+**Status:** Proposed | Accepted | Deprecated | Superseded
+
+**Date:** {{DATE}}
 
 ---
 
 ## Context
 
-{{CONTEXT}}
-
-_What is the situation that requires a decision? Include relevant constraints, forces, and background._
-
----
-
-## Options considered
-
-### Option A — [Name]
-
-Brief description.
-
-**Pros**:
-- 
-
-**Cons**:
-- 
-
----
-
-### Option B — [Name]
-
-Brief description.
-
-**Pros**:
-- 
-
-**Cons**:
-- 
-
----
-
-### Option C — [Name] _(if applicable)_
-
-Brief description.
-
-**Pros**:
-- 
-
-**Cons**:
-- 
-
----
+What is the issue that we're seeing that requires a decision?
 
 ## Decision
 
-We chose **Option [X]** because:
-
-_Explain the reasoning. Reference the constraints and forces from the context section._
-
----
+What is the change that we're proposing and why?
 
 ## Consequences
 
-**Positive**:
-- 
+### Positive
+- Consequence 1
+- Consequence 2
 
-**Negative / trade-offs**:
-- 
+### Negative
+- Consequence 1
+- Consequence 2
 
-**Risks**:
-- 
+## Alternatives Considered
 
----
-
-## Implementation notes
-
-_Optional: any specific guidance for the team implementing this decision._
-
----
+- Alternative 1: [brief reason why not chosen]
+- Alternative 2: [brief reason why not chosen]
 
 ## References
 
-- 
+- Link 1
+- Link 2
