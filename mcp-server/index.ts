@@ -26,13 +26,22 @@ const server = new McpServer({
 // ── /generate_prd ────────────────────────────────────────────────────────────
 server.tool(
   "generate_prd",
-  "Scaffold a Product Requirements Document for a new feature. Reads sdlc/planning/PRD-template.md and fills it using the provided feature description.",
+  "Scaffold a Product Requirements Document for a new feature. Fills every section with real content derived from inputs. Use apply: true to register the PRD in docs/planning/index.md after review.",
   {
     featureName: z.string().describe("Short name for the feature (used as filename)"),
-    description: z.string().describe("What the feature does and why it is needed"),
+    problemStatement: z.string().describe("What problem this feature solves and why it matters"),
+    userType: z.string().optional().describe("Who this feature is for (e.g. 'admin user', 'developer'). Defaults to 'user'."),
+    goals: z.array(z.string()).optional().describe("List of specific goals this feature achieves"),
+    nonGoals: z.array(z.string()).optional().describe("Explicit list of what this feature will NOT do"),
+    acceptanceCriteria: z.array(z.string()).optional().describe("Conditions that must be true for the feature to be considered done"),
+    successMetrics: z.array(z.string()).optional().describe("Measurable outcomes that indicate success"),
+    technicalNotes: z.string().optional().describe("Constraints, dependencies, risks, or architectural notes"),
+    touchesExistingCode: z.boolean().optional().describe("Set true if this feature modifies existing code — triggers research agent warning (Trigger 1)"),
+    relatedTo: z.string().optional().describe("Path or name of a related PRD, ADR, or doc"),
     outputDir: z.string().optional().default("docs/planning").describe("Directory to write the PRD into"),
+    apply: z.boolean().optional().default(false).describe("Set true to register the PRD in docs/planning/index.md. Default false = draft only."),
   },
-  async ({ featureName, description, outputDir }) => generatePrd({ featureName, description, outputDir })
+  async (input) => generatePrd(input)
 );
 
 // ── /plan_sprint ─────────────────────────────────────────────────────────────
