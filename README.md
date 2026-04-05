@@ -95,6 +95,7 @@ sdlc-mcp/
 │   │   ├── plan-sprint.ts
 │   │   ├── create-adr.ts
 │   │   ├── gen-test-plan.ts
+│   │   ├── project-setup.ts
 │   │   └── release-notes.ts
 │   └── package.json
 ├── scripts/
