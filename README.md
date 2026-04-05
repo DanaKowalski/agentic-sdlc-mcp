@@ -17,7 +17,7 @@ Three layers working together:
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/sdlc-mcp.git
+git clone https://github.com/danakowalski/agentic-sdlc-mcp.git
 cd sdlc-mcp
 npm install
 ```
