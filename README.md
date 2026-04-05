@@ -57,6 +57,7 @@ npm run check:configs
 | Command | What it does |
 |---------|-------------|
 | `/generate_prd` | Scaffold a new Product Requirements Document |
+| `/project_setup` | Initialize a new project using composable layers and presets from sdlc/setup/. Use after /generate_prd. Example: /project_setup preset=next-full projectName="my-app" |
 | `/plan_sprint` | Create a sprint plan from backlog items |
 | `/create_adr` | New Architecture Decision Record |
 | `/gen_test_plan` | Test plan scaffold for a feature |
