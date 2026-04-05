@@ -1,0 +1,21 @@
+{
+  "_meta": {
+    "id": "next-full",
+    "label": "Next.js full (standard web app)",
+    "description": "Next.js + TypeScript + Tailwind, full test stack, GitHub Actions CI. No AI/DB addons \u2014 add those separately."
+  },
+  "layers": {
+    "framework": "next-ts",
+    "testing": "vitest-playwright",
+    "ci": "gh-actions-pr",
+    "database": "none",
+    "deployment": "vercel"
+  },
+  "addons": [],
+  "extra_dependencies": {},
+  "env_vars_required": [],
+  "post_setup_steps": [
+    "npx shadcn init (optional)",
+    "npx playwright install chromium"
+  ]
+}

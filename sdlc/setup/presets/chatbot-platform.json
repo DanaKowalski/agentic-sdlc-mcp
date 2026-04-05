@@ -1,0 +1,64 @@
+{
+  "_meta": {
+    "id": "chatbot-platform",
+    "label": "Chatbot platform (Next.js full-stack AI app)",
+    "description": "Full-stack Next.js AI chatbot. Supabase for auth/db, OpenRouter for model routing, Upstash for rate limiting, Vitest for unit and integration, Playwright for e2e.",
+    "derived_from": "chatbot-platform/package.json"
+  },
+  "layers": {
+    "framework": "next-ts",
+    "testing": "vitest-playwright",
+    "ci": "gh-actions-pr",
+    "database": "supabase",
+    "deployment": "vercel"
+  },
+  "addons": [
+    "openrouter-ai-sdk",
+    "upstash-ratelimit",
+    "shadcn",
+    "pino-logging",
+    "zod"
+  ],
+  "extra_dependencies": {
+    "dependencies": {
+      "@ai-sdk/openai": "^3.x",
+      "@openrouter/ai-sdk-provider": "^2.x",
+      "@supabase/ssr": "^0.9.x",
+      "@supabase/supabase-js": "^2.x",
+      "@upstash/ratelimit": "^2.x",
+      "@upstash/redis": "^1.x",
+      "@xenova/transformers": "^2.x",
+      "ai": "^6.x",
+      "bcryptjs": "^3.x",
+      "framer-motion": "^12.x",
+      "papaparse": "^5.x",
+      "pdf-parse": "^2.x",
+      "pino": "^10.x",
+      "pino-pretty": "^13.x",
+      "recharts": "^3.x",
+      "zod": "^4.x"
+    },
+    "devDependencies": {
+      "@faker-js/faker": "^10.x",
+      "@types/bcryptjs": "^2.x",
+      "@types/papaparse": "^5.x",
+      "dotenv": "^17.x",
+      "dotenv-cli": "^11.x",
+      "supabase": "^2.x"
+    }
+  },
+  "env_vars_required": [
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "OPENROUTER_API_KEY",
+    "UPSTASH_REDIS_REST_URL",
+    "UPSTASH_REDIS_REST_TOKEN"
+  ],
+  "post_setup_steps": [
+    "npx shadcn init",
+    "npx supabase init",
+    "npx playwright install chromium",
+    "Copy .env.example to .env.local and fill in values"
+  ]
+}

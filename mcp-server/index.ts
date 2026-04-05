@@ -16,6 +16,7 @@ import { planSprint } from "./tools/plan-sprint.js";
 import { createAdr } from "./tools/create-adr.js";
 import { genTestPlan } from "./tools/gen-test-plan.js";
 import { releaseNotes } from "./tools/release-notes.js";
+import { projectSetup } from "./tools/project-setup.js";
 
 const server = new McpServer({
   name: "sdlc",
@@ -82,6 +83,25 @@ server.tool(
     outputDir: z.string().optional().default("docs/releases").describe("Directory to write release notes into"),
   },
   async ({ version, fromRef, toRef, outputDir }) => releaseNotes({ version, fromRef, toRef, outputDir })
+);
+
+
+// ── /project_setup ───────────────────────────────────────────────────────────
+server.tool(
+  "project_setup",
+  "Scaffold a new project from a preset or custom layer selection. Generates a setup plan doc first, then applies files on confirmation. Available presets: next-full, api-only, chatbot-platform.",
+  {
+    projectName: z.string().describe("Name of the project being set up"),
+    preset: z.string().optional().describe("Preset id to use (next-full | api-only | chatbot-platform). Omit for custom layer selection."),
+    framework: z.string().optional().describe("Framework layer id (next-ts | node-ts | react-lib). Used when no preset is specified."),
+    testing: z.string().optional().describe("Testing layer id (vitest-playwright | vitest-only | none). Used when no preset is specified."),
+    database: z.string().optional().describe("Database layer id (supabase | none). Used when no preset is specified."),
+    deployment: z.string().optional().describe("Deployment layer id (vercel | docker | none). Used when no preset is specified."),
+    ci: z.string().optional().describe("CI layer id (gh-actions-pr | none). Used when no preset is specified."),
+    outputDir: z.string().optional().default("docs/planning").describe("Where to write the setup plan doc"),
+    apply: z.boolean().optional().default(false).describe("Set true to apply files after plan is confirmed. Default false = plan only."),
+  },
+  async (input) => projectSetup(input)
 );
 
 // ── Start server ─────────────────────────────────────────────────────────────

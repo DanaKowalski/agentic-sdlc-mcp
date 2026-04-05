@@ -1,0 +1,18 @@
+{
+  "_meta": {
+    "id": "api-only",
+    "label": "Node.js API / service",
+    "description": "TypeScript Node.js service or API. Vitest unit tests, GitHub Actions CI. No frontend."
+  },
+  "layers": {
+    "framework": "node-ts",
+    "testing": "vitest-only",
+    "ci": "gh-actions-pr",
+    "database": "none",
+    "deployment": "docker"
+  },
+  "addons": [],
+  "extra_dependencies": {},
+  "env_vars_required": [],
+  "post_setup_steps": []
+}

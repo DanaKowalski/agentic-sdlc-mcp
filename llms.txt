@@ -33,6 +33,19 @@ Then tell the user what you found and ask where they want to pick up.
 - `/gen_test_plan` — test plan scaffold
 - `/release_notes` — draft from git log
 
+## Subagent system
+
+This repo uses a prescriptive subagent architecture. The main session agent (orchestrator) must spawn subagents in these situations — no exceptions:
+- Codebase not read this session and task needs code knowledge → spawn research agent
+- Task touches more than 3 unread files → spawn research agent
+- Task has 2+ independent work units → spawn parallel implementation agents
+- Task is destructive or high-risk → spawn isolated implementation agent
+- Implementation complete → spawn review agent
+
+Every subagent writes output to `docs/agents/<date>-<role>-<slug>.md`. Commit after each.
+
+Full rules: `sdlc/agents/orchestrator.md`
+
 ## Key files
 
 - `sdlc/overview.md` — phase definitions and rules
@@ -42,6 +55,10 @@ Then tell the user what you found and ask where they want to pick up.
 - `sdlc/implementation/coding-standards.md` — TypeScript conventions
 - `sdlc/implementation/git-workflow.md` — branching and commit rules
 - `sdlc/maintenance/config-maintenance-checklist.md` — how to handle config drift
+- `sdlc/agents/orchestrator.md` — prescriptive subagent rules (read before any non-trivial task)
+- `sdlc/agents/research-agent.md` — research subagent prompt template
+- `sdlc/agents/implementation-agent.md` — implementation subagent prompt template
+- `sdlc/agents/review-agent.md` — review subagent prompt template
 - `config/config-sources.json` — single source of truth for all MCP configs
 
 ## Conventions

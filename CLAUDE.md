@@ -43,6 +43,7 @@ Standard session closing pattern:
 
 | Command | What it produces |
 |---------|-----------------|
+| `/project_setup` | Scaffold a new project from a preset or custom layer selection — generates a plan first, applies on confirmation |
 | `/generate_prd` | Fills `sdlc/planning/PRD-template.md` for a new feature |
 | `/plan_sprint` | Creates a sprint plan document |
 | `/create_adr` | New Architecture Decision Record in `sdlc/design/` |
@@ -84,6 +85,36 @@ Four tool config files must stay in sync. The canonical source is `config/config
 - If drift is detected, follow `sdlc/maintenance/config-maintenance-checklist.md`
 
 ---
+
+
+## Subagent system
+
+This repo uses a prescriptive subagent architecture. Read `sdlc/agents/orchestrator.md` before starting any non-trivial task.
+
+### Mandatory spawn triggers (do not skip these)
+
+| Trigger | Condition | Agent to spawn |
+|---------|-----------|---------------|
+| 1 | Codebase not read this session + task needs structure knowledge | Research |
+| 2 | Task touches >3 unread files | Research |
+| 3 | Task has 2+ independent work units | Parallel implementation agents |
+| 4 | Task is destructive or high-risk (delete, refactor, auth, payments) | Isolated implementation |
+| 5 | Implementation complete | Review |
+
+### Output protocol
+
+Every subagent MUST write output to `docs/agents/<date>-<role>-<slug>.md`. Commit immediately after. Never accept verbal-only output from a subagent.
+
+### Tool invocation
+
+- **Claude Code**: `Task` tool — native, full context isolation
+- **Roo/Cline**: `new_task` boomerang mode
+- **Cursor**: new Composer window (background agents in beta)
+- **Windsurf**: simulate sequentially — research → implementation → review
+- **Any tool**: new chat session with the agent prompt, copy output file back
+
+Full rules: `sdlc/agents/orchestrator.md`
+Agent templates: `sdlc/agents/research-agent.md`, `sdlc/agents/implementation-agent.md`, `sdlc/agents/review-agent.md`
 
 ## What NOT to do
 
