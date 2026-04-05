@@ -1,69 +1,109 @@
-# PRD: {{FEATURE_NAME}}
+# {{FEATURE_NAME}} - Product Requirements Document
 
-**Date**: {{DATE}}
-**Author**: 
-**Status**: Draft | In Review | Approved | Superseded
+**Version:** 1.0  
+**Date:** {{DATE}}  
+**Status:** Draft  
+**Owner:** 
 
 ---
 
-## Problem statement
+## 1. Overview & Vision
 
+**One-sentence summary:**  
+[Brief description]
+
+**Problem / Opportunity:**  
 {{DESCRIPTION}}
 
-_What problem does this solve? Who has this problem? What happens today without this feature?_
+**Strategic Alignment:**  
+How this aligns with broader goals or existing systems.
 
----
+## 2. Goals & Success Metrics
 
-## Goals
+**Business Objectives:**
+- Objective 1
+- Objective 2
 
-- [ ] 
-- [ ] 
+**User Goals:**
+- Goal 1
+- Goal 2
 
-## Non-goals
+**Success Metrics (KPIs):**
 
-Things explicitly out of scope for this feature:
+| Metric | Baseline | Target | Notes |
+|--------|----------|--------|-------|
+|        |          |        |       |
 
-- 
+## 3. Target Users & Personas
 
----
+**Primary Persona:**  
+- Description, pain points, behaviors
 
-## User stories
+**Secondary Persona:**  
+- Description (if applicable)
 
-| As a... | I want to... | So that... |
-|---------|-------------|-----------|
-|         |             |           |
+**High-level User Stories:**
+- As a [user], I want [feature] so that [benefit]
 
----
+## 4. Features & Functional Requirements
 
-## Acceptance criteria
+**Prioritized Features (MoSCoW):**
 
-- [ ] 
-- [ ] 
+**Must Have:**
+- Feature 1
+  - Acceptance Criteria (Given-When-Then)
 
----
+**Should Have:**
+- Feature 2
 
-## Technical considerations
+**Could Have:**
+- Feature 3
 
-_Known constraints, dependencies, or risks the engineering team should be aware of._
+**Won't Have (this release):**
 
----
+## 5. Non-Functional Requirements
 
-## Success metrics
+- **Performance:** 
+- **Scalability:** 
+- **Security & Privacy:** 
+- **Usability & Accessibility:** 
+- **Technical Constraints:** 
 
-| Metric | Baseline | Target | Measurement method |
-|--------|----------|--------|--------------------|
-|        |          |        |                    |
+## 6. Assumptions, Dependencies & Risks
 
----
+**Assumptions:**
+- Assumption 1 (validation plan)
 
-## Open questions
+**Dependencies:**
+- Dependency 1
 
-| Question | Owner | Due | Answer |
-|----------|-------|-----|--------|
-|          |       |     |        |
+**Risks & Mitigations:**
 
----
+| Risk | Probability | Impact | Mitigation |
+|------|-------------|--------|------------|
+|      |             |        |            |
 
-## References
+## 7. Out of Scope
 
-- 
+- Item 1
+- Item 2
+
+## 8. Timeline & Milestones
+
+- MVP / Phase 1: 
+- Full Release: 
+
+## 9. Open Questions
+
+- Question 1?
+- Question 2?
+
+## 10. Appendices & References
+
+- Research links
+- Competitor analysis
+- Wireframes / diagrams
+- Glossary
+
+**Change Log:**
+- YYYY-MM-DD: Initial draft
