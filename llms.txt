@@ -11,13 +11,13 @@ This repo gives AI assistants:
 
 ## How to orient at session start
 
-Read these files in order to understand current project state:
+Read these files in order:
 
 1. `sdlc/overview.md` — SDLC phases, rules, and how this repo works
-2. `docs/` — all in-progress and completed deliverables (PRDs, ADRs, sprint plans, test plans, release notes)
-3. `CLAUDE.md` — available tools, commands, and conventions
+2. `docs/memory/project-state.md` — current phase and open work
+3. `AGENTS.md` — core agent rules, conventions, and tools
 
-Then tell the user what you found and ask where they want to pick up.
+Then tell the user what you found and ask: "We are in the [phase] phase. Open work: [list]. Last session: [summary]. Where would you like to pick up?"
 
 ## Available tools
 
@@ -25,46 +25,42 @@ Then tell the user what you found and ask where they want to pick up.
 - **sdlc-gitmcp** (this server, SSE): live read access to this repo's files and state
 - **sdlc** (stdio MCP, local): exposes slash commands
 
-## Available commands
+## Available commands (local)
 
 - `/generate_prd` — scaffold a Product Requirements Document
+- `/create_technical_design` — run full design phase (technical design + ADRs + checklist)
+- `/create_adr` — create a single Architecture Decision Record
 - `/plan_sprint` — create a sprint plan
-- `/create_adr` — new Architecture Decision Record
 - `/gen_test_plan` — test plan scaffold
 - `/release_notes` — draft from git log
 
-## Subagent system
+## Subagent System
 
-This repo uses a prescriptive subagent architecture. The main session agent (orchestrator) must spawn subagents in these situations — no exceptions:
-- Codebase not read this session and task needs code knowledge → spawn research agent
-- Task touches more than 3 unread files → spawn research agent
-- Task has 2+ independent work units → spawn parallel implementation agents
-- Task is destructive or high-risk → spawn isolated implementation agent
-- Implementation complete → spawn review agent
+This repo uses a structured subagent architecture coordinated by the orchestrator.
 
-Every subagent writes output to `docs/agents/<date>-<role>-<slug>.md`. Commit after each.
+Main agents:
+- Research Agent
+- Design Agent
+- Implementation Agent
+- Review Agent
 
-Full rules: `sdlc/agents/orchestrator.md`
+Full rules and spawn triggers: `sdlc/agents/orchestrator.md`
+
+All subagent outputs are written to `docs/agents/<date>-<role>-<slug>.md` and committed immediately.
 
 ## Key files
 
-- `sdlc/overview.md` — phase definitions and rules
-- `sdlc/glossary.md` — shared vocabulary
-- `sdlc/planning/PRD-template.md` — PRD template
-- `sdlc/design/architecture-decision-record-template.md` — ADR template
-- `sdlc/implementation/coding-standards.md` — TypeScript conventions
-- `sdlc/implementation/git-workflow.md` — branching and commit rules
-- `sdlc/maintenance/config-maintenance-checklist.md` — how to handle config drift
-- `sdlc/agents/orchestrator.md` — prescriptive subagent rules (read before any non-trivial task)
-- `sdlc/agents/research-agent.md` — research subagent prompt template
-- `sdlc/agents/implementation-agent.md` — implementation subagent prompt template
-- `sdlc/agents/review-agent.md` — review subagent prompt template
-- `config/config-sources.json` — single source of truth for all MCP configs
+- `sdlc/overview.md` — overall SDLC phases and rules
+- `AGENTS.md` — core agent rules and conventions
+- `sdlc/agents/orchestrator.md` — orchestrator and subagent triggers
+- `sdlc/planning/README.md` — planning phase workflow and templates
+- `sdlc/design/README.md` — design phase workflow and templates
+- `docs/memory/project-state.md` — live project state (always read at session start)
 
 ## Conventions
 
 - Language: TypeScript, ESM, Node 18+
-- Commits: Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`)
+- Commits: Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, `test:`, `refactor:`)
 - Branch naming: `feat/`, `fix/`, `chore/`, `docs/`
 - Never commit directly to `main`
 - Never edit generated `config/*.json` files directly — edit `config/config-sources.json` then run `npm run sync:configs`
@@ -72,9 +68,9 @@ Full rules: `sdlc/agents/orchestrator.md`
 ## Session closing protocol
 
 Before ending a session, commit all new or updated documents:
-```
+
 git add docs/
-git commit -m "docs(planning): update PRD for [feature]"
+git commit -m "docs([phase]): [brief description]"
 git push
-```
+
 This ensures the next session — in any tool — can read current state via GitMCP.

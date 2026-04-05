@@ -1,78 +1,52 @@
 # Orchestrator rules
 
-This document defines mandatory rules for the orchestrator agent — the main session agent that holds the overall plan and coordinates subagents. These rules are prescriptive. Follow them exactly; do not use judgment to override them.
+This document defines the preferred operating principles for the orchestrator agent — the main session agent responsible for owning the overall plan and coordinating subagents.
+
+These rules should be followed as strong defaults. Use judgment when a situation clearly warrants deviation, and always document any deviation with reasoning.
 
 ---
 
 ## What the orchestrator is
 
-The orchestrator is the main AI agent in a session. It owns the plan, delegates bounded tasks to subagents, and synthesises results. It does not do deep research or isolated implementation itself — it delegates those to subagents and reads their outputs.
+The orchestrator is the main coordinating agent in a session. It maintains the high-level plan, delegates bounded tasks to specialized subagents, and synthesizes their results. 
+
+It avoids performing deep research or heavy implementation work itself, preferring to delegate those to the appropriate subagents.
 
 ---
 
-## Mandatory spawn triggers
+## When to Spawn Subagents
 
-You MUST spawn a subagent in the following situations. These are not suggestions.
+Follow these triggers as the default behavior. Only skip spawning a subagent if you have a strong, explicit reason — and document that reason in your plan.
 
-### Trigger 1 — Unknown codebase
+### Trigger 1 — Unknown Codebase
+Spawn a research agent before writing or modifying code if you have not yet explored the relevant files in the current session.
 
-Spawn a **research agent** before writing any code, config, or plan if:
-- You have not read the project's source files in this session, AND
-- The task requires understanding existing code structure, patterns, or dependencies
+### Trigger 2 — Large Scope
+Spawn a research agent when the task involves understanding or modifying more than 3 files whose contents are not already in context.
 
-Do not guess at structure. Do not proceed from memory. Spawn first.
+### Trigger 3 — Independent Work Units
+Spawn parallel subagents when a task naturally breaks into independent units (e.g. implementation + tests).
 
-### Trigger 2 — Task touches more than 3 files you have not read
+### Trigger 4 — High-Risk Changes
+Spawn an isolated implementation agent for destructive changes, large refactors, or security-sensitive work.
 
-Spawn a **research agent** scoped to those files before making changes.
-
-Threshold: if implementing the task will require editing or understanding more than 3 files whose contents you have not seen in the current context window, delegate exploration first.
-
-### Trigger 3 — Task has two or more independent work units
-
-Spawn **parallel implementation agents** if the task can be broken into units with no shared state:
-- Writing tests and writing implementation are independent — spawn both
-- Writing docs and writing code are independent — spawn both
-- Two separate features in one PR — spawn one agent per feature
-
-Do not do parallel work serially in one context. Delegate.
-
-### Trigger 4 — Task is destructive or high-risk
-
-Spawn an **isolated implementation agent** for any task that involves:
-- Deleting files or directories
-- Refactoring across more than 2 files
-- Modifying database migrations
-- Changing auth logic, payment logic, or any security-sensitive code
-
-The isolated agent works in its own context. If it goes wrong, the main context is unaffected.
-
-### Trigger 5 — Code is ready for review
-
-Spawn a **review agent** before marking any implementation task complete. The review agent checks against coding standards, test coverage, and relevant SDLC docs.
-
-Do not self-review. Delegate.
+### Trigger 5 — Before Finalizing Work
+Always spawn a review agent before marking significant implementation work as complete.
 
 ---
 
-## Mandatory handoff protocol
+## Handoff Protocol (Default Approach)
 
-Every subagent invocation MUST follow this protocol exactly.
+When spawning a subagent, include in its context:
 
-### What to give every subagent
+- Its role (research / implementation / review)
+- A single, clearly bounded task
+- Explicit scope (files/directories it may touch)
+- Key constraints
+- Required output file path in `docs/agents/`
+- Relevant `sdlc/` documents it must consult
 
-Include all of the following in the subagent's initial context:
-
-```
-1. Role: one of [research | implementation | review]
-2. Task: one specific, bounded objective (not a vague goal)
-3. Scope: explicit list of files or directories it may read/write
-4. Constraints: explicit list of what it must NOT do
-5. Output: the exact file path it must write its result to
-6. Standards: which sdlc/ docs it must consult (always include sdlc/overview.md)
-```
-
-Never spawn a subagent with a vague task. If you cannot write a single-sentence task description, the task is not ready to delegate.
+Prefer writing clear, specific tasks. If you cannot define a bounded objective, break the task down further before delegating.
 
 ### Output contract
 
