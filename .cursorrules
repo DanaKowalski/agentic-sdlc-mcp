@@ -1,0 +1,49 @@
+# .cursorrules — sdlc-mcp context
+
+## What this repo is
+
+Foundational SDLC repository. Gives AI tools structured knowledge of the development lifecycle and exposes active commands for creating deliverables.
+
+## Cross-session and cross-tool continuity
+
+At session start, call `sdlc-gitmcp` to read `sdlc/overview.md` and scan `docs/` for in-progress PRDs, ADRs, and sprint plans. Tell the user what you found, then ask where to pick up. This repo is the persistent memory layer across all tools — any work committed here is visible in Cursor, Roo, Claude Code, and any other MCP-compatible tool.
+
+At session end, commit all new or updated docs using conventional commit format.
+
+## Always use Context7 for library docs
+
+Before referencing any npm package, framework, or library API — call Context7 to fetch current documentation. Do not rely on training data for package specifics.
+
+## Tools (always on)
+
+- **context7**: current library/framework docs
+- **sdlc-gitmcp**: live read of this repo's state via GitMCP — use at session start to orient
+
+## Commands available
+
+- `/generate_prd` — fill PRD template for a new feature
+- `/plan_sprint` — sprint planning document
+- `/create_adr` — Architecture Decision Record
+- `/gen_test_plan` — test plan scaffold
+- `/release_notes` — draft from git log
+
+## Knowledge base: sdlc/ folder
+
+Check `sdlc/` before answering questions about:
+- Code style → `sdlc/implementation/coding-standards.md`
+- Git workflow → `sdlc/implementation/git-workflow.md`
+- Architecture → `sdlc/design/`
+- Testing → `sdlc/testing/`
+- Deployment → `sdlc/deployment/`
+
+## Stack
+
+TypeScript, ESM, Node 18+. Full-stack web (JS/TS).
+
+## Commit conventions
+
+Conventional commits: `feat:`, `fix:`, `chore:`, `docs:`, `test:`, `refactor:`
+
+## Config management
+
+Edit only `config/config-sources.json` for MCP changes. Run `npm run sync:configs` after. The other `config/*.json` files are generated — do not edit them directly.

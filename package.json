@@ -1,0 +1,27 @@
+{
+  "name": "sdlc-mcp",
+  "version": "0.1.0",
+  "description": "Foundational MCP repository for AI-assisted software development",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p mcp-server/tsconfig.json",
+    "mcp:start": "node dist/mcp-server/index.js",
+    "check:configs": "npx tsx scripts/check-configs.ts",
+    "sync:configs": "npx tsx scripts/sync-configs.ts",
+    "prepare": "node -e \"if(process.env.CI !== 'true') require('child_process').execSync('husky', {stdio:'inherit'})\" || true"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "husky": "^9.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.4.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.20.0",
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

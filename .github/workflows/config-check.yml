@@ -1,0 +1,65 @@
+name: Config drift check
+
+on:
+  schedule:
+    # Every Monday at 09:00 UTC
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "config/**"
+      - "scripts/check-configs.ts"
+      - "scripts/sync-configs.ts"
+
+jobs:
+  check-configs:
+    name: Detect config drift
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run config check
+        id: check
+        run: npm run check:configs
+        continue-on-error: true
+
+      - name: Upload drift report
+        if: steps.check.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: config-drift-report
+          path: sdlc/maintenance/config-drift-report.md
+          retention-days: 30
+
+      - name: Create GitHub issue on drift
+        if: steps.check.outcome == 'failure' && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let body = '## Config drift detected\n\nThe weekly config check found drift. See the attached artifact for the full report.\n\n';
+            try {
+              body += fs.readFileSync('sdlc/maintenance/config-drift-report.md', 'utf8');
+            } catch {}
+            body += '\n\n**Fix**: Follow `sdlc/maintenance/config-maintenance-checklist.md`';
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Config drift detected — ${new Date().toISOString().split('T')[0]}`,
+              body,
+              labels: ['maintenance', 'config']
+            });
+
+      - name: Fail if drift
+        if: steps.check.outcome == 'failure'
+        run: exit 1

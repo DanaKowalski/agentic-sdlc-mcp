@@ -1,0 +1,41 @@
+# .windsurfrules — sdlc-mcp context
+
+## Project
+
+Foundational SDLC MCP repository. Tools, commands, and knowledge base for AI-assisted software development across the full lifecycle.
+
+## Cross-session continuity
+
+At session start: call `sdlc-gitmcp` to read current repo state (`sdlc/overview.md`, `docs/`). Surface what's in progress and ask where to pick up. At session end: commit updated docs so the next session — in any tool — can find them.
+
+## Tools (always on)
+
+- **sdlc-gitmcp**: GitMCP live read of this repo. Use at session start.
+- **context7**: current library/framework docs
+
+## Tool: Context7 (always on)
+
+Call Context7 automatically whenever a library or framework is mentioned. Never answer package-API questions from training memory alone.
+
+## Commands
+
+- `/generate_prd` — PRD scaffold
+- `/plan_sprint` — sprint plan
+- `/create_adr` — Architecture Decision Record
+- `/gen_test_plan` — test plan
+- `/release_notes` — from git log
+
+## Knowledge base
+
+`sdlc/` folder is the source of truth for all standards and templates. Consult it before generating code, docs, or process guidance.
+
+## Stack + conventions
+
+- TypeScript, ESM, Node 18+
+- Conventional commits
+- Feature branches off `main`
+- Never push directly to `main`
+
+## Config
+
+Only edit `config/config-sources.json`. Run `npm run sync:configs` to push changes to all tool configs.

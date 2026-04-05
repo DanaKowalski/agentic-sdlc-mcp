@@ -1,0 +1,18 @@
+# Enforce LF line endings for all text files.
+# This prevents Windows Git (core.autocrlf=true) from converting line endings
+# in shell scripts and TypeScript files, which would break the Unix pre-commit
+# shim on Linux/macOS after a Windows clone-and-push.
+
+* text=auto eol=lf
+
+# Shell scripts must always be LF
+*.sh text eol=lf
+.husky/pre-commit text eol=lf
+
+# PowerShell scripts use CRLF on Windows (optional but conventional)
+*.ps1 text eol=crlf
+
+# Binary files — no line ending conversion
+*.png binary
+*.jpg binary
+*.zip binary

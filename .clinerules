@@ -1,0 +1,51 @@
+# .clinerules — sdlc-mcp context
+
+Loaded automatically by Roo/Cline at session start.
+
+## Project identity
+
+Foundational SDLC repository with MCP tools, slash commands, and structured knowledge for AI-assisted development.
+
+## Tools (always on)
+
+- **context7**: Fetch current library docs before referencing any npm package or framework API. Always prefer this over training knowledge for package-specific questions.
+- **sdlc-gitmcp**: Read live repo state from GitHub via GitMCP. At session start, use this to read `sdlc/overview.md` and `docs/` so you understand current SDLC state and can pick up where the last session left off.
+- **sdlc MCP server**: Exposes slash commands below.
+
+## Cross-session continuity
+
+At the start of every session:
+1. Call `sdlc-gitmcp` to read `sdlc/overview.md` and scan `docs/` for in-progress work
+2. Tell the user what you found and ask where to pick up
+
+At the end of every session:
+- Commit completed or updated docs with conventional commit messages so the next session can find them
+
+## Commands (you invoke these)
+
+- `/generate_prd` — scaffold a PRD from `sdlc/planning/PRD-template.md`
+- `/plan_sprint` — create a sprint planning document
+- `/create_adr` — new Architecture Decision Record
+- `/gen_test_plan` — test plan scaffold
+- `/release_notes` — draft from git log
+
+## Knowledge base
+
+All standards, templates, and guidelines live in `sdlc/`. Before answering questions about code style, process, or architecture — check the relevant `sdlc/` subfolder.
+
+Key files:
+- `sdlc/overview.md` — how this repo works
+- `sdlc/implementation/coding-standards.md` — TS conventions
+- `sdlc/implementation/git-workflow.md` — branching + commits
+
+## Conventions
+
+- TypeScript, ESM, Node 18+
+- Full-stack web (JS/TS)
+- Conventional commits: `feat:` `fix:` `chore:` `docs:`
+- Feature branches: `feat/`, `fix/`, `chore/`
+- Never commit to `main` directly
+
+## Config rule
+
+`config/config-sources.json` is the only file you edit for MCP config changes. Run `npm run sync:configs` to propagate. Never edit the generated `config/*.json` files directly.

@@ -1,0 +1,63 @@
+# sdlc-mcp
+
+A foundational SDLC repository that serves as the persistent memory layer and AI development toolkit across all agentic tools (Claude Code, Cursor, Roo/Cline, Windsurf, and others).
+
+## Purpose
+
+This repo gives AI assistants:
+- Structured knowledge of the full software development lifecycle
+- Active slash commands for creating SDLC deliverables
+- A live state layer so any session in any tool can pick up where the last one left off
+
+## How to orient at session start
+
+Read these files in order to understand current project state:
+
+1. `sdlc/overview.md` — SDLC phases, rules, and how this repo works
+2. `docs/` — all in-progress and completed deliverables (PRDs, ADRs, sprint plans, test plans, release notes)
+3. `CLAUDE.md` — available tools, commands, and conventions
+
+Then tell the user what you found and ask where they want to pick up.
+
+## Available tools
+
+- **context7** (stdio MCP): fetches current npm/framework docs on demand
+- **sdlc-gitmcp** (this server, SSE): live read access to this repo's files and state
+- **sdlc** (stdio MCP, local): exposes slash commands
+
+## Available commands
+
+- `/generate_prd` — scaffold a Product Requirements Document
+- `/plan_sprint` — create a sprint plan
+- `/create_adr` — new Architecture Decision Record
+- `/gen_test_plan` — test plan scaffold
+- `/release_notes` — draft from git log
+
+## Key files
+
+- `sdlc/overview.md` — phase definitions and rules
+- `sdlc/glossary.md` — shared vocabulary
+- `sdlc/planning/PRD-template.md` — PRD template
+- `sdlc/design/architecture-decision-record-template.md` — ADR template
+- `sdlc/implementation/coding-standards.md` — TypeScript conventions
+- `sdlc/implementation/git-workflow.md` — branching and commit rules
+- `sdlc/maintenance/config-maintenance-checklist.md` — how to handle config drift
+- `config/config-sources.json` — single source of truth for all MCP configs
+
+## Conventions
+
+- Language: TypeScript, ESM, Node 18+
+- Commits: Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`)
+- Branch naming: `feat/`, `fix/`, `chore/`, `docs/`
+- Never commit directly to `main`
+- Never edit generated `config/*.json` files directly — edit `config/config-sources.json` then run `npm run sync:configs`
+
+## Session closing protocol
+
+Before ending a session, commit all new or updated documents:
+```
+git add docs/
+git commit -m "docs(planning): update PRD for [feature]"
+git push
+```
+This ensures the next session — in any tool — can read current state via GitMCP.

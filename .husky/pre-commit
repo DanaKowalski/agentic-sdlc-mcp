@@ -1,0 +1,6 @@
+#!/bin/sh
+# Cross-platform pre-commit hook.
+# Logic lives in scripts/pre-commit.ts so it works on Linux, macOS, and Windows.
+# This sh shim is used on Unix (Linux/macOS).
+# Windows users: see .husky/pre-commit.ps1
+npx tsx scripts/pre-commit.ts

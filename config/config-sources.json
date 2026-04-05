@@ -1,0 +1,64 @@
+{
+  "_meta": {
+    "description": "Single source of truth for all MCP server configurations. Edit here, then run `npm run sync:configs` to propagate to all tool config files.",
+    "last_synced": "2026-04-05T10:36:04.127Z",
+    "schema_version": "1.0.0"
+  },
+  "mcpServers": {
+    "context7": {
+      "_docs": "https://github.com/upstash/context7",
+      "_purpose": "Fetches current library/framework documentation. AI calls this automatically when you reference a package name.",
+      "_pinned_version": "latest",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ],
+      "type": "stdio"
+    },
+    "sdlc-gitmcp": {
+      "_docs": "https://gitmcp.io/",
+      "_purpose": "Live read access to the sdlc-mcp GitHub repo via GitMCP. Lets any tool read sdlc/ templates, ADRs, sprint docs, and pick up SDLC state across sessions. No local server needed — SSE over HTTPS.",
+      "_transport": "sse",
+      "_url_pattern": "https://gitmcp.io/YOUR_USERNAME/agentic-sdlc-mcp",
+      "_setup_note": "Replace YOUR_USERNAME with your GitHub username. No command/args — uses url + type only.",
+      "url": "https://gitmcp.io/danakowalski/agentic-sdlc-mcp",
+      "type": "sse"
+    },
+    "sdlc": {
+      "_docs": "./mcp-server/README.md",
+      "_purpose": "Exposes SDLC slash commands: /generate_prd, /plan_sprint, /create_adr, /gen_test_plan, /release_notes",
+      "command": "node",
+      "args": [
+        "./dist/mcp-server/index.js"
+      ],
+      "type": "stdio"
+    }
+  },
+  "toolTargets": {
+    "claude": {
+      "outputPath": "config/claude-mcp-config.json",
+      "schemaRef": "https://docs.claude.ai/mcp",
+      "lastKnownSchemaVersion": "2025-01",
+      "notes": "Install via: cp config/claude-mcp-config.json ~/.claude/claude_mcp_config.json"
+    },
+    "roo": {
+      "outputPath": "config/roo-mcp.json",
+      "schemaRef": "https://docs.roocode.com/mcp",
+      "lastKnownSchemaVersion": "2025-01",
+      "notes": "Install via: cp config/roo-mcp.json .roo/mcp.json in each project"
+    },
+    "cursor": {
+      "outputPath": "config/cursor-mcp.json",
+      "schemaRef": "https://docs.cursor.com/mcp",
+      "lastKnownSchemaVersion": "2025-01",
+      "notes": "Install via: cp config/cursor-mcp.json .cursor/mcp.json in each project"
+    },
+    "windsurf": {
+      "outputPath": "config/windsurf-mcp.json",
+      "schemaRef": "https://docs.windsurf.com/mcp",
+      "lastKnownSchemaVersion": "2025-01",
+      "notes": "Install via: cp config/windsurf-mcp.json ~/.windsurf/mcp.json"
+    }
+  }
+}
