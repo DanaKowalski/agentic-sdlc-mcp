@@ -1,101 +1,105 @@
 # CLAUDE.md — sdlc-mcp context
 
-This file is automatically loaded by Claude Code at session start. It defines the available tools, commands, and skills for this repository.
+Loaded automatically by Claude Code at session start.
+
+## What this repo is
+
+Foundational SDLC repository. Gives AI tools structured knowledge of the development lifecycle and exposes active commands for creating deliverables.
 
 ---
 
-## Project identity
+## Always use Context7 for library docs
 
-This is a foundational SDLC repository. Its purpose is to give AI assistants structured knowledge of the software development lifecycle and expose active commands for creating SDLC deliverables.
+Before referencing any npm package, framework, or library API — call Context7 to fetch current documentation. Do not rely on training data for package specifics. Training data goes stale; Context7 does not.
 
 ---
 
-## Available tools (always on — call autonomously)
+## Tools (always on — call autonomously)
 
 | Tool | When to use it |
 |------|---------------|
 | `context7` | Any time a library, framework, or npm package is mentioned — fetch current docs before answering |
-| `sdlc-gitmcp` | Read live repo state: current ADRs, sprint docs, PRDs, templates. Use to orient at session start or pick up where a previous session left off |
-| `filesystem` | Reading/writing project files |
+| `sdlc-gitmcp` | Session start orientation, reading templates and past outputs |
+| `filesystem` | Reading/writing local project files |
 | `sdlc` MCP | Exposes the commands below |
 
-**Always use Context7 before referencing library APIs.** Do not rely on training data for package documentation — versions change.
-
-**At the start of every session:** call `sdlc-gitmcp` to read `sdlc/overview.md` and any recent docs in `docs/` to understand current project state before taking action. This is how work is resumed across tools and sessions.
+---
 
 ## Cross-session and cross-tool continuity
 
-This repo is the persistent memory layer across all AI tools. Any session — whether in Claude Code, Cursor, Roo, or any other tool — should begin by reading repo state via `sdlc-gitmcp` before doing new work.
+This repo is the persistent memory layer across all AI tools. Any session — whether in Claude Code, Cursor, Roo, or any other tool — must begin by reading current state before doing new work.
 
-Standard session opening pattern:
-1. Read `sdlc/overview.md` — understand the phases and rules
-2. Read `docs/` — find any in-progress PRDs, sprint plans, or ADRs
-3. Read `CLAUDE.md` (this file) — understand available tools and commands
-4. Ask the user: "I can see [current state]. Where would you like to pick up?"
+### Standard session opening pattern
 
-Standard session closing pattern:
-- Commit any new or updated documents to the repo so the next session can find them
-- Use conventional commit format: `docs(planning): update PRD for auth feature`
+```
+1. Read `sdlc/memory/quick-ref.md`       — commands, triggers, agent roles (one page)
+2. Read `docs/memory/project-state.md`   — current phase, open work, last session summary
+3. If project-state.md does not exist    — this is a new project, create it before proceeding
+4. Tell the user what you found and ask: "We are in the [phase] phase. Open work: [list]. Last session: [summary]. Where would you like to pick up?"
+```
+
+Do not skip step 2. A session that starts without reading project state will duplicate work or contradict past decisions.
+
+For deeper context on any phase, commands, or agent rules — read the relevant `sdlc/` doc. The quick-ref is orientation, not a replacement for the full docs.
+
+### Standard session closing pattern
+
+Before ending any session:
+
+```
+1. Update `docs/memory/project-state.md` with current phase, what was completed, what is open, any decisions not yet in an ADR
+2. Commit and push:
+   git add docs/memory/
+   git commit -m "docs(memory): update project state — <one word describing session>"
+   git push
+```
+
+Use conventional commit format for all other commits:
+- `docs(planning): update PRD for auth feature`
+- `feat(mcp): add release-notes command`
+- `chore: sync configs after context7 update`
+
+If you do not push before closing, the next session in any other tool will start blind.
+
+Full memory rules: `sdlc/agents/memory-protocol.md`
 
 ---
 
-## Available commands (user-invoked)
+## Commands (user-invoked)
 
 | Command | What it produces |
 |---------|-----------------|
-| `/project_setup` | Scaffold a new project from a preset or custom layer selection — generates a plan first, applies on confirmation |
-| `/generate_prd` | Fills `sdlc/planning/PRD-template.md` for a new feature |
-| `/plan_sprint` | Creates a sprint plan document |
-| `/create_adr` | New Architecture Decision Record in `sdlc/design/` |
-| `/gen_test_plan` | Test plan scaffold for a feature |
-| `/release_notes` | Draft release notes from recent git log |
+| `/generate_prd` | PRD doc in `docs/planning/` |
+| `/project_setup` | Project scaffold plan + files |
+| `/plan_sprint` | Sprint plan in `docs/sprints/` |
+| `/create_adr` | ADR in `docs/adr/` |
+| `/gen_test_plan` | Test plan in `docs/testing/` |
+| `/release_notes` | Release notes in `docs/releases/` |
 
 ---
 
-## Skills (background knowledge — already loaded)
+## Knowledge base: sdlc/ folder
 
-The `sdlc/` folder is your knowledge base. Key files:
+Check `sdlc/` before answering questions about:
 
-- `sdlc/overview.md` — SDLC phases, rules, how this repo works
-- `sdlc/implementation/coding-standards.md` — TypeScript conventions for this project
-- `sdlc/implementation/git-workflow.md` — branching strategy, commit conventions
-- `sdlc/design/architecture-decision-record-template.md` — ADR format
-
-When answering questions about code style, architecture decisions, or process — consult the relevant `sdlc/` file first.
-
----
-
-## Repo conventions
-
-- **Language**: TypeScript (ESM, Node 18+)
-- **Stack**: Full-stack web (JS/TS)
-- **Branching**: `main` is protected. Feature branches named `feat/`, `fix/`, `chore/`
-- **Commits**: Conventional commits (`feat:`, `fix:`, `chore:`, `docs:`)
-- **PRs**: Require passing CI before merge
+- Code style → `sdlc/implementation/coding-standards.md`
+- Git workflow → `sdlc/implementation/git-workflow.md`
+- Architecture → `sdlc/design/`
+- Testing → `sdlc/testing/`
+- Deployment → `sdlc/deployment/`
+- Agent rules → `sdlc/agents/orchestrator.md`
 
 ---
-
-## Config maintenance
-
-Four tool config files must stay in sync. The canonical source is `config/config-sources.json`.
-
-- Never edit `config/claude-mcp-config.json`, `config/roo-mcp.json`, etc. directly
-- Run `npm run sync:configs` after any change to `config-sources.json`
-- Run `npm run check:configs` to verify freshness
-- If drift is detected, follow `sdlc/maintenance/config-maintenance-checklist.md`
-
----
-
 
 ## Subagent system
 
-This repo uses a prescriptive subagent architecture. Read `sdlc/agents/orchestrator.md` before starting any non-trivial task.
+Read `sdlc/agents/orchestrator.md` before starting any non-trivial task.
 
-### Mandatory spawn triggers (do not skip these)
+### Mandatory spawn triggers
 
 | Trigger | Condition | Agent to spawn |
 |---------|-----------|---------------|
-| 1 | Codebase not read this session + task needs structure knowledge | Research |
+| 1 | Codebase not read this session + task needs code knowledge | Research |
 | 2 | Task touches >3 unread files | Research |
 | 3 | Task has 2+ independent work units | Parallel implementation agents |
 | 4 | Task is destructive or high-risk (delete, refactor, auth, payments) | Isolated implementation |
@@ -116,9 +120,33 @@ Every subagent MUST write output to `docs/agents/<date>-<role>-<slug>.md`. Commi
 Full rules: `sdlc/agents/orchestrator.md`
 Agent templates: `sdlc/agents/research-agent.md`, `sdlc/agents/implementation-agent.md`, `sdlc/agents/review-agent.md`
 
-## What NOT to do
+---
+
+## Stack
+
+TypeScript, ESM, Node 18+. Full-stack web (JS/TS).
+
+---
+
+## Commit conventions
+
+Conventional commits: `feat:`, `fix:`, `chore:`, `docs:`, `test:`, `refactor:`
+Branch naming: `feat/`, `fix/`, `chore/`, `docs/`
+Never commit directly to `main`.
+
+---
+
+## Config management
+
+Edit only `config/config-sources.json` for MCP changes. Run `npm run sync:configs` after. The other `config/*.json` files are generated — do not edit them directly. Run `npm run check:configs` to verify freshness.
+
+---
+
+## What not to do
 
 - Do not invent library APIs — use Context7
 - Do not create files outside the established folder structure without asking
 - Do not commit directly to `main`
 - Do not edit generated config files directly (anything with `_generated` key)
+- Do not store state in chat — write to `docs/memory/`
+- Do not mark a task complete without a review agent verdict
