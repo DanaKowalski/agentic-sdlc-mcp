@@ -1,19 +1,17 @@
 /**
- * pre-commit.ts
- *
- * Simple pre-commit hook that runs the config parity check.
+ * pre-commit.ts - Minimal version
  */
 
 import { spawnSync } from "child_process";
 
 const CONFIG_PATTERNS = [
   /^config\//,
+  /^llms\.txt$/,
   /^\.clinerules$/,
   /^\.cursorrules$/,
   /^\.windsurfrules$/,
-  /^AGENTS\.md$/,
   /^CLAUDE\.md$/,
-  /^llms\.txt$/,
+  /^AGENTS\.md$/,
 ];
 
 const IGNORE_PATTERNS = [
@@ -28,15 +26,14 @@ const gitResult = spawnSync("git", ["diff", "--cached", "--name-only"], {
 });
 
 if (gitResult.error) {
-  console.error("pre-commit: could not run git diff — skipping");
   process.exit(0);
 }
 
 const staged = gitResult.stdout.trim().split("\n").filter(Boolean);
 
 const relevantStaged = staged.filter((file) => 
-  CONFIG_PATTERNS.some((pattern) => pattern.test(file)) &&
-  !IGNORE_PATTERNS.some((pattern) => pattern.test(file))
+  CONFIG_PATTERNS.some((p) => p.test(file)) &&
+  !IGNORE_PATTERNS.some((p) => p.test(file))
 );
 
 if (relevantStaged.length === 0) {
