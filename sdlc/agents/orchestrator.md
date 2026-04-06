@@ -18,6 +18,14 @@ It avoids performing deep research or heavy implementation work itself, preferri
 
 Follow these triggers as the default behavior. Only skip spawning a subagent if you have a strong, explicit reason — and document that reason in your plan.
 
+### Trigger 0 — Design Phase
+Spawn the Design Agent when ALL of the following are true:
+- An approved PRD exists for the feature
+- The feature involves architectural decisions (new data model, external integration, new API surface, auth/security, etc.)
+- No design artifacts already exist for this feature in docs/design/
+
+Skip for simple bug fixes or pure UI changes.
+
 ### Trigger 1 — Unknown Codebase
 Spawn a research agent before writing or modifying code if you have not yet explored the relevant files in the current session.
 
@@ -39,7 +47,7 @@ Always spawn a review agent before marking significant implementation work as co
 
 When spawning a subagent, include in its context:
 
-- Its role (research / implementation / review)
+- Its role (research / design / implementation / review)
 - A single, clearly bounded task
 - Explicit scope (files/directories it may touch)
 - Key constraints
@@ -52,25 +60,16 @@ Prefer writing clear, specific tasks. If you cannot define a bounded objective, 
 
 Every subagent MUST write its result to a file. Verbal output from a subagent is not acceptable. The output path follows this convention:
 
-```
 docs/agents/<date>-<agent-role>-<slug>.md
 
-Examples:
-  docs/agents/2026-04-05-research-auth-flow.md
-  docs/agents/2026-04-05-implementation-user-api.md
-  docs/agents/2026-04-05-review-payment-module.md
-```
-
-After the subagent completes, the orchestrator reads its output via `sdlc-gitmcp` or the filesystem, then continues the plan.
+After the subagent completes, the orchestrator reads its output via sdlc-gitmcp or the filesystem, then continues the plan.
 
 ### Commit after every subagent output
 
 After reading a subagent's output, commit it to the repo immediately:
 
-```
 git add docs/agents/
-git commit -m "docs(agents): <agent-role> — <slug>"
-```
+git commit -m "docs(agents): <agent-role> - <slug>"
 
 This ensures the output is readable by any subsequent agent or tool session via GitMCP.
 
@@ -90,7 +89,6 @@ This ensures the output is readable by any subsequent agent or tool session via 
 
 Every session follows this sequence:
 
-```
 1. Orient
    Read sdlc/overview.md and docs/ via sdlc-gitmcp
    Understand current project state and open tasks
@@ -100,7 +98,8 @@ Every session follows this sequence:
    List each task, its spawn trigger (if any), and the expected output path
 
 3. Execute (per task)
-   If spawn trigger active → spawn appropriate subagent
+   If Trigger 0 (Design Phase) active → spawn Design Agent first
+   If other spawn trigger active → spawn appropriate subagent
    If no trigger → handle directly in this context
 
 4. Collect
@@ -108,79 +107,40 @@ Every session follows this sequence:
    Commit outputs to repo
 
 5. Synthesise
-   Update the relevant PRD, ADR, or sprint doc with results
+   Update the relevant PRD, ADR, or design document with results
    Commit
 
 6. Close
    Write session summary to docs/agents/<date>-orchestrator-summary.md
    Commit and push
-```
 
 ---
 
 ## Tool-specific invocation
 
 ### Claude Code
-
-Native subagents via the `Task` tool. The Task tool spawns a fresh Claude instance with its own context window.
-
-```
-Task(
-  description="Research the auth flow in src/lib/supabase/",
-  prompt="<full prompt per handoff protocol above>"
-)
-```
-
-Multiple Task calls can run in parallel. Spawn all parallel agents before awaiting any result.
+Native subagents via the Task tool. The Task tool spawns a fresh Claude instance with its own context window.
 
 ### Roo / Cline (boomerang mode)
-
-Use the `new_task` tool to spawn a child agent in a scoped mode. The child returns control to the parent when complete.
-
-```
-<new_task>
-<mode>code</mode>
-<message>
-[full prompt per handoff protocol]
-</message>
-</new_task>
-```
-
-Set the child's mode to match the agent role: `code` for implementation, `ask` for research, `architect` for review.
+Use the new_task tool to spawn a child agent in a scoped mode.
 
 ### Cursor
-
-Cursor does not have native subagent isolation. Simulate the pattern:
-1. Open a new Composer window (separate context)
-2. Paste the subagent prompt from the handoff protocol
-3. Run it to completion
-4. Copy the output file path back to the main Composer
-
-Note: Cursor background agents are in beta — check current docs before relying on them.
+Use a new Composer window to simulate subagents.
 
 ### Windsurf
-
-Windsurf uses sequential cascade flows. Simulate parallel agents as sequential steps:
-1. Complete the research phase fully before implementation
-2. Complete implementation before review
-3. Document each phase output before starting the next
+Simulate sequentially: Research → Design → Implementation → Review.
 
 ### Any tool (fallback)
-
-If the tool does not support subagent spawning:
-1. Write the subagent prompt to `docs/agents/<date>-<role>-prompt.md`
-2. Start a new chat session with that prompt as the opening message
-3. Copy the output back to the repo manually
-4. Continue the orchestrator session
+Write the subagent prompt to docs/agents/<date>-<role>-prompt.md and use a new chat session.
 
 ---
 
 ## Anti-patterns — never do these
 
 | Anti-pattern | Why it fails |
-|---|---|
-| Spawning a subagent with "help me with X" | Too vague — no bounded output, no clear scope |
+|--------------|--------------|
+| Spawning a subagent with "help me with X" | Too vague — no bounded output |
 | Reading subagent output from chat history | Not durable — lost on session end |
-| Skipping the review agent to save time | Creates hidden debt — always review |
-| Spawning a subagent for a 5-minute task | Overhead exceeds benefit — use the trigger rules |
+| Skipping the review agent to save time | Creates hidden debt |
+| Spawning a subagent for a 5-minute task | Overhead exceeds benefit |
 | Not committing subagent output immediately | Next session cannot find it via GitMCP |

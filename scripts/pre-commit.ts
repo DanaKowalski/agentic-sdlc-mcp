@@ -1,7 +1,7 @@
 /**
  * pre-commit.ts
  *
- * Prevents infinite drift check loops when config/rule files are involved.
+ * checks for document drift before commit
  */
 
 import { spawnSync } from "child_process";
@@ -11,8 +11,8 @@ const CONFIG_PATTERNS = [
   /^\.clinerules$/,
   /^\.cursorrules$/,
   /^\.windsurfrules$/,
-  /^AGENTS\.md$/,           // ← updated
-  /^CLAUDE\.md$/,           // keep for now if still present
+  /^AGENTS\.md$/,
+  /^CLAUDE\.md$/,
   /^llms\.txt$/,
 ];
 
