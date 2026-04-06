@@ -11,17 +11,17 @@ This repo gives AI assistants:
 
 ## How to orient at session start
 
-Read these files in order:
+Read these files in order to understand current project state:
 
 1. `sdlc/overview.md` — SDLC phases, rules, and how this repo works
-2. `docs/memory/project-state.md` — current phase and open work
+2. `docs/memory/project-state.md` — current phase and open work (create if it does not exist)
 3. `AGENTS.md` — core agent rules, conventions, and tools
 
-Then tell the user what you found and ask: "We are in the [phase] phase. Open work: [list]. Last session: [summary]. Where would you like to pick up?"
+Then tell the user what you found and ask where they want to pick up.
 
 ## Available tools
 
-- **context7** (stdio MCP): fetches current npm/framework docs on demand
+- **context7** (stdio MCP): fetches current library/framework docs on demand
 - **sdlc-gitmcp** (this server, SSE): live read access to this repo's files and state
 - **sdlc** (stdio MCP, local): exposes slash commands
 
@@ -34,41 +34,32 @@ Then tell the user what you found and ask: "We are in the [phase] phase. Open wo
 - `/gen_test_plan` — test plan scaffold
 - `/release_notes` — draft from git log
 
-## Subagent System
+## Subagent system
 
-This repo uses a structured subagent architecture coordinated by the orchestrator.
+This repo uses a prescriptive subagent architecture. The main session agent (orchestrator) must spawn subagents in these situations:
 
-Main agents:
-- Research Agent
-- Design Agent
-- Implementation Agent
-- Review Agent
+- Codebase not read this session and task needs code knowledge → spawn research agent
+- Task touches more than 3 unread files → spawn research agent
+- Task has 2+ independent work units → spawn parallel implementation agents
+- Task is destructive or high-risk → spawn isolated implementation agent
+- Implementation complete → spawn review agent
 
-Full rules and spawn triggers: `sdlc/agents/orchestrator.md`
+Every subagent writes output to `docs/agents/<date>-<role>-<slug>.md`. Commit after each.
 
-All subagent outputs are written to `docs/agents/<date>-<role>-<slug>.md` and committed immediately.
+Full rules: `sdlc/agents/orchestrator.md`
 
 ## Key files
 
-- `sdlc/overview.md` — overall SDLC phases and rules
+- `sdlc/overview.md` — phase definitions and rules
 - `AGENTS.md` — core agent rules and conventions
 - `sdlc/agents/orchestrator.md` — orchestrator and subagent triggers
 - `sdlc/planning/README.md` — planning phase workflow and templates
 - `sdlc/design/README.md` — design phase workflow and templates
-- `docs/memory/project-state.md` — live project state (always read at session start)
-
-## Conventions
-
-- Language: TypeScript, ESM, Node 18+
-- Commits: Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, `test:`, `refactor:`)
-- Branch naming: `feat/`, `fix/`, `chore/`, `docs/`
-- Never commit directly to `main`
-- Never edit generated `config/*.json` files directly — edit `config/config-sources.json` then run `npm run sync:configs`
+- `docs/memory/project-state.md` — live project state (always read or create at session start)
 
 ## Session closing protocol
 
 Before ending a session, commit all new or updated documents:
-
 git add docs/
 git commit -m "docs([phase]): [brief description]"
 git push

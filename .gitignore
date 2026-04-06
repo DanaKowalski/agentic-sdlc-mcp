@@ -34,3 +34,6 @@ sdlc/maintenance/config-drift-report.md
 
 # tool-specific local overrides (do not commit personal paths)
 config/*.local.json
+
+scripts/last-checked.json
+sdlc/maintenance/config-drift-report.md

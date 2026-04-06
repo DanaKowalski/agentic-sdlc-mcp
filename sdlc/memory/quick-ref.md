@@ -6,14 +6,18 @@ Read this at session start. One page. Everything you need to orient before doing
 
 ## Session sequence
 
-OPEN:  
-1. Read this file  
-2. Read `docs/memory/project-state.md`  
+**OPEN:**
+1. Read this file
+2. Read `docs/memory/project-state.md` (create it if it does not exist)
 3. Tell user current state and ask where to pick up
 
-CLOSE:  
-1. Update `docs/memory/project-state.md`  
-2. git add docs/memory/ && git commit -m "docs(memory): update project state - ..." && git push
+**CLOSE:**
+1. Update `docs/memory/project-state.md`
+2. git add docs/memory/
+3. git commit -m "docs(memory): update project state - <one word describing session>"
+4. git push
+
+Memory is mandatory. Never start real work without it.
 
 ---
 
@@ -26,8 +30,6 @@ CLOSE:
 | Implementation | Design complete                | Feature branch + tests               | Implementation Agent          |
 | Testing      | Code complete                    | Test plan + results                  | `/gen_test_plan`              |
 | Deployment   | Tests pass                       | Release notes                        | `/release_notes`              |
-
-A phase does not start until the previous phase's main output is approved.
 
 ---
 
@@ -76,15 +78,13 @@ All agent outputs go to `docs/agents/<date>-<role>-<slug>.md` and must be commit
 | `approved-with-notes`| Criteria met, minor issues           | Proceed, fix notes before next PR |
 | `blocked`            | Criteria not met or serious issue    | Re-spawn implementation agent with review as context. Do not bypass. |
 
-A `blocked` verdict must be resolved before continuing.
-
 ---
 
 ## Key file locations
 
 | File                            | Purpose |
 |---------------------------------|---------|
-| `AGENTS.md`                     | Core agent rules (read first) |
+| `AGENTS.md`                     | Core agent rules |
 | `sdlc/overview.md`              | Full SDLC phases and rules |
 | `sdlc/agents/orchestrator.md`   | Orchestrator + spawn triggers |
 | `docs/memory/project-state.md`  | Live project state |
@@ -98,4 +98,3 @@ A `blocked` verdict must be resolved before continuing.
 - Do not store state in chat — always write to `docs/memory/`
 - Do not skip the review agent
 - Do not commit directly to `main`
-- Do not edit generated config files directly
