@@ -8,7 +8,7 @@ This document defines how agents read, write, and maintain memory across session
 
 Memory is structured state written to files. It is not chat history, not in-context summaries, and not verbal output. If it is not written to a file and committed, it does not exist for the next session.
 
-There are two kinds:
+There are two kinds: 
 
 | Kind | What it is | Where it lives | Updated when |
 |------|-----------|----------------|--------------|
