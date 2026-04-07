@@ -111,7 +111,7 @@ Not everything is worth writing down. Use this to decide:
 - Blockers and how they were resolved
 - Agent outputs (already covered by output protocol)
 
-**Never persist:**
+**No need to persist:**
 - Code snippets — those live in the code
 - Library API details — use Context7 at session start
 - Conversation back-and-forth — only outcomes matter
