@@ -60,13 +60,5 @@ for (const [toolName, target] of Object.entries(sources.toolTargets)) {
   log(`  ✓  ${toolName} → ${target.outputPath}`);
 }
 
-// Stamp sources with sync time
-sources._meta = {
-  ...sources._meta,
-  // @ts-ignore
-  last_synced: new Date().toISOString(),
-};
-fs.writeFileSync(SOURCES_PATH, JSON.stringify(sources, null, 2) + "\n");
-
 log("\n✅ All configs synced.\n");
 log("   Next: run npm run check:configs to verify\n");
