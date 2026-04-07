@@ -52,10 +52,10 @@ Full rules: `sdlc/agents/orchestrator.md`
 
 - `sdlc/overview.md` — phase definitions and rules
 - `AGENTS.md` — core agent rules and conventions
+- `docs/memory/project-state.md` — live project state (always read or create at session start)
 - `sdlc/agents/orchestrator.md` — orchestrator and subagent triggers
 - `sdlc/planning/README.md` — planning phase workflow and templates
 - `sdlc/design/README.md` — design phase workflow and templates
-- `docs/memory/project-state.md` — live project state (always read or create at session start)
 
 ## Session closing protocol
 

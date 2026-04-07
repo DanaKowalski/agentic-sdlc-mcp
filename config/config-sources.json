@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Single source of truth for all MCP server configurations. Edit here, then run `npm run sync:configs` to propagate to all tool config files.",
-    "last_synced": "2026-04-06T22:58:21.410Z",
+    "last_synced": "2026-04-06T23:02:10.229Z",
     "schema_version": "1.0.0"
   },
   "mcpServers": {
