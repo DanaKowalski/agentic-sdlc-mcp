@@ -1,106 +1,111 @@
 # AGENTS.md — Core Agent Rules & Conventions
 
-This is the central, model-agnostic rule set for all agents in this SDLC foundation.  
-It applies across Claude Code, Roo/Cline (OpenRouter), Cursor, Windsurf, Hugging Face models, and any other tool.
+This is the central, model-agnostic rule set for all agents using this SDLC framework.
+It applies across Claude Code, Roo/Cline, Cursor, Windsurf, and any other tool.
 
 ---
 
-## What this repo is
+## What this framework is
 
-This is a foundational SDLC repository. It provides structured knowledge of the software development lifecycle and exposes active commands for creating deliverables.
+This is a foundational SDLC repository served via GitMCP. It provides structured
+knowledge of the software development lifecycle and templates for creating deliverables.
+
+It is read-only from your project's perspective. All project files, memory, and agent
+outputs live in your local project directory — never in this framework repo.
 
 ---
 
 ## Always use Context7 for library docs
 
-Before referencing any npm package, framework, or library API, call **Context7** to fetch current documentation.  
-Do not rely on training data for package specifics — it goes stale.
+Before referencing any npm package, framework, or library API, call Context7 to fetch
+current documentation. Do not rely on training data for package specifics — it goes stale.
 
 ---
 
 ## Cross-session and cross-tool continuity
 
-This repo serves as the persistent memory layer across all AI tools and models.  
-Every session must begin by reading current project state before doing new work.
-
 ### Standard Session Opening Pattern
 
-1. Read `sdlc/memory/quick-ref.md` — commands, triggers, and agent roles
-2. Read `docs/memory/project-state.md` — current phase, open work, last session summary
-3. If `project-state.md` does not exist, this is a new project — create it before proceeding
-4. Tell the user what you found and ask:  
+1. Fetch `sdlc/memory/quick-ref.md` from sdlc-gitmcp — commands, triggers, agent roles
+2. Read `docs/memory/project-state.md` **in your local project directory**
+3. If it does not exist locally, this is a new project — create it locally before proceeding
+4. Tell the user what you found and ask:
    "We are in the [phase] phase. Open work: [list]. Last session: [summary]. Where would you like to pick up?"
 
-Do not skip reading `project-state.md`.
+Do not skip step 2. Do not look for project-state.md on the remote framework server —
+it does not exist there. It lives in your project.
 
 ### Standard Session Closing Pattern
 
 Before ending any session:
 
-1. Update `docs/memory/project-state.md` with current phase, completed work, open work, and any decisions not yet in an ADR.
-2. Commit the change with message: "docs(memory): update project state - <one word describing session>"
-3. Push the commit.
+1. Update `docs/memory/project-state.md` in your local project directory
+2. Commit: `docs(memory): update project state - <one word describing session>`
+3. Push
 
-Full memory rules: `sdlc/agents/memory-protocol.md`
+Full memory rules: fetch `sdlc/agents/memory-protocol.md` from sdlc-gitmcp
 
 ---
 
 ## Commands
 
-| Command                    | What it produces                              |
-|----------------------------|-----------------------------------------------|
-| `/generate_prd`            | PRD document                                  |
-| `/project_setup`           | Project scaffold plan + files                 |
-| `/plan_sprint`             | Sprint plan                                   |
-| `/create_adr`              | Architecture Decision Record                  |
-| `/create_technical_design` | Full design phase (technical design + ADRs + checklist) |
-| `/gen_test_plan`           | Test plan                                     |
-| `/release_notes`           | Release notes from git log                    |
+Commands are available in two modes depending on how you are connected:
+
+**Running sdlc MCP server locally** — invoke commands directly:
+
+| Command | What it produces |
+|---------|-----------------|
+| `/generate_prd` | PRD document |
+| `/project_setup` | Project scaffold plan + files |
+| `/plan_sprint` | Sprint plan |
+| `/create_adr` | Architecture Decision Record |
+| `/create_technical_design` | Full design phase suite |
+| `/gen_test_plan` | Test plan |
+| `/release_notes` | Release notes from git log |
+
+**Connected via sdlc-gitmcp (remote)** — commands are not available.
+Use the templates directly instead:
+
+| Instead of | Fetch and follow |
+|-----------|-----------------|
+| `/generate_prd` | `sdlc/planning/PRD-template.md` |
+| `/create_technical_design` | `sdlc/design/technical-design-template.md` |
+| `/create_adr` | `sdlc/design/architecture-decision-record-template.md` |
+| `/gen_test_plan` | `sdlc/testing/README.md` |
+| `/release_notes` | Draft from git log manually |
 
 ---
 
-## Knowledge Base: sdlc/ folder
+## Knowledge base — fetch as needed
 
-Always consult the `sdlc/` folder for phase-specific guidance:
+Fetch these from sdlc-gitmcp when entering each phase:
 
-- Planning → `sdlc/planning/`
-- Design → `sdlc/design/`
-- Implementation → `sdlc/implementation/`
-- Testing → `sdlc/testing/`
-- Deployment → `sdlc/deployment/`
+- Planning → `sdlc/planning/README.md`
+- Design → `sdlc/design/README.md`
+- Implementation → `sdlc/implementation/README.md`
+- Testing → `sdlc/testing/README.md`
 - Agent rules → `sdlc/agents/orchestrator.md` and individual agent files
 
 ---
 
-## Core Conventions
+## Subagent system
 
-- Language: TypeScript, ESM, Node 18+
-- Commits: Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, `test:`, `refactor:`)
-- Branch naming: `feat/`, `fix/`, `chore/`, `docs/`
-- Never commit directly to `main`
-- Config management: Edit only `config/config-sources.json`, then run `npm run sync:configs`
-
----
-
-## Subagent System
-
-Read `sdlc/agents/orchestrator.md` before any non-trivial task.
+Fetch and read `sdlc/agents/orchestrator.md` before any non-trivial task.
 
 The system uses these agents:
-- Research Agent
-- Design Agent
-- Implementation Agent
-- Review Agent
+- Research Agent — fetch `sdlc/agents/research-agent.md`
+- Design Agent — fetch `sdlc/agents/design-agent.md`
+- Implementation Agent — fetch `sdlc/agents/implementation-agent.md`
+- Review Agent — fetch `sdlc/agents/review-agent.md`
 
-All agent outputs must be written to `docs/agents/<date>-<role>-<slug>.md` and committed immediately.
+All agent outputs must be written to `docs/agents/<date>-<role>-<slug>.md`
+in your local project directory and committed immediately.
 
 ---
 
-## Tool-Specific Behavior
+## Tool-specific behavior
 
-For tool-specific instructions (subagent invocation, simulation methods, etc.), refer to:
-- `.clinerules` — Roo/Cline
-- `.cursorrules` — Cursor
-- `.windsurfrules` — Windsurf
-
-This `AGENTS.md` file contains the shared foundation that applies to all models and tools.
+For tool-specific subagent invocation instructions, fetch from sdlc-gitmcp:
+- Roo/Cline → `.clinerules`
+- Cursor → `.cursorrules`
+- Windsurf → `.windsurfrules`
