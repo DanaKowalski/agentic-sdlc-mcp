@@ -28,4 +28,12 @@ Use this checklist after running `/generate_prd` to ensure the planning phase is
 - [ ] Project is ready for `/project_setup` or implementation phase
 
 **Date Completed:** 
-**Approved by:** 
+**Approved by:**
+
+## Phase Routing
+
+- [ ] If feature involves a new data model → design phase required
+- [ ] If feature introduces an external integration → design phase required
+- [ ] If feature changes an API surface → design phase required
+- [ ] If feature touches auth or security → design phase required
+- [ ] If none of the above → document reasoning for skipping design phase here: ___ 

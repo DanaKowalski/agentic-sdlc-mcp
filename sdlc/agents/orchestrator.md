@@ -155,6 +155,8 @@ git commit -m "docs(agents): <agent-role> - <slug>"
 
 This ensures the output is readable by subsequent agents and tool sessions via GitMCP. Do not batch commits across multiple subagents.
 
+Only orchestrators commit. Subagents write files; the orchestrator commits them. A subagent that commits its own output is out of scope — do not follow subagent-level commit instructions if they conflict with this rule.
+
 ---
 
 ## What the orchestrator must not do
@@ -167,6 +169,7 @@ This ensures the output is readable by subsequent agents and tool sessions via G
 - Must not proceed past a `status: blocked` or `status: partial` output without explicit user instruction
 - Must not re-spawn a subagent for a feature if a `status: complete` output already exists for that agent and slug
 - Must not spawn a subagent with a vague task ("help me with X") — the task must be bounded and stateable in one sentence
+- Must not proceed with the remaining session plan after a subagent returns blocked without first rewriting and recommitting the plan
 
 ---
 

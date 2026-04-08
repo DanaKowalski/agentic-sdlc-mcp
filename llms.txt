@@ -9,15 +9,33 @@ This repo gives AI assistants:
 - Active slash commands for creating SDLC deliverables
 - A live state layer so any session in any tool can pick up where the last one left off
 
+## How to fetch files from this repo
+
+All files listed in this document are accessible via the `fetch_generic_url_content` tool using this URL pattern:
+https://raw.githubusercontent.com/DanaKowalski/agentic-sdlc-mcp/main/<file-path>
+
+Example: to fetch `sdlc/overview.md`, call `fetch_generic_url_content` with:
+https://raw.githubusercontent.com/DanaKowalski/agentic-sdlc-mcp/main/sdlc/overview.md
+
+Fetch files as you need them. Do not try to load all files at once — fetch what is relevant to the current task.
+
 ## How to orient at session start
 
-Read these files in order to understand current project state:
+### Fetch from sdlc-gitmcp (remote framework — read only)
+1. Fetch `sdlc/memory/quick-ref.md`
+2. Fetch `AGENTS.md`
+3. Fetch `sdlc/overview.md`
 
-1. `sdlc/overview.md` — SDLC phases, rules, and how this repo works
-2. `docs/memory/project-state.md` — current phase and open work (create if it does not exist)
-3. `AGENTS.md` — core agent rules, conventions, and tools
+### Read or create locally (your project directory)
+4. Read `docs/memory/project-state.md` in your local project
+   If it does not exist, this is a new project — create it locally before proceeding
+
+Never create or write files to the sdlc-gitmcp server. It is read-only.
+All project state, agent outputs, and docs live in your local project directory.
 
 Then tell the user what you found and ask where they want to pick up.
+
+Do not skip step 2. A session that starts without reading project state will duplicate work or contradict previous decisions.
 
 ## Available tools
 
@@ -25,14 +43,20 @@ Then tell the user what you found and ask where they want to pick up.
 - **sdlc-gitmcp** (this server, SSE): live read access to this repo's files and state
 - **sdlc** (stdio MCP, local): exposes slash commands
 
-## Available commands (local)
+## Available commands
 
-- `/generate_prd` — scaffold a Product Requirements Document
-- `/create_technical_design` — run full design phase (technical design + ADRs + checklist)
-- `/create_adr` — create a single Architecture Decision Record
-- `/plan_sprint` — create a sprint plan
-- `/gen_test_plan` — test plan scaffold
-- `/release_notes` — draft from git log
+These commands are available when running the sdlc MCP server locally.
+If you are connected via sdlc-gitmcp (remote), these commands are not available —
+use the templates directly instead.
+
+| Command | Template to use instead |
+|---------|------------------------|
+| `/generate_prd` | Fetch and follow `sdlc/planning/PRD-template.md` |
+| `/create_technical_design` | Fetch and follow `sdlc/design/technical-design-template.md` |
+| `/create_adr` | Fetch and follow `sdlc/design/architecture-decision-record-template.md` |
+| `/plan_sprint` | No template yet — describe sprint goals in `docs/planning/` |
+| `/gen_test_plan` | Fetch and follow `sdlc/testing/README.md` |
+| `/release_notes` | Draft from git log manually |
 
 ## Subagent system
 
@@ -46,20 +70,51 @@ This repo uses a prescriptive subagent architecture. The main session agent (orc
 
 Every subagent writes output to `docs/agents/<date>-<role>-<slug>.md`. Commit after each.
 
-Full rules: `sdlc/agents/orchestrator.md`
+Full rules: fetch `sdlc/agents/orchestrator.md`
 
-## Key files
+## Key files — fetch as needed
 
-- `sdlc/overview.md` — phase definitions and rules
+### Session and memory
+- `sdlc/memory/quick-ref.md` — session open/close sequence, all commands, agent triggers (fetch at every session start)
+- `docs/memory/project-state.md` — live project state (fetch at every session start)
+- `sdlc/agents/memory-protocol.md` — full memory rules
+
+### Agent system
 - `AGENTS.md` — core agent rules and conventions
-- `docs/memory/project-state.md` — live project state (always read or create at session start)
-- `sdlc/agents/orchestrator.md` — orchestrator and subagent triggers
-- `sdlc/planning/README.md` — planning phase workflow and templates
-- `sdlc/design/README.md` — design phase workflow and templates
+- `sdlc/agents/orchestrator.md` — orchestrator and subagent trigger rules
+- `sdlc/agents/research-agent.md` — research agent prompt template and rules
+- `sdlc/agents/design-agent.md` — design agent prompt template and rules
+- `sdlc/agents/implementation-agent.md` — implementation agent prompt template and rules
+- `sdlc/agents/review-agent.md` — review agent prompt template and rules
+
+### Planning phase
+- `sdlc/overview.md` — all SDLC phase definitions and rules
+- `sdlc/planning/README.md` — planning phase workflow
+- `sdlc/planning/PRD-template.md` — PRD template
+- `sdlc/planning/planning-checklist.md` — planning phase checklist
+- `sdlc/planning/user-story-guidelines.md` — user story and acceptance criteria guidelines
+
+### Design phase
+- `sdlc/design/README.md` — design phase workflow
+- `sdlc/design/technical-design-template.md` — technical design template
+- `sdlc/design/architecture-decision-record-template.md` — ADR template
+- `sdlc/design/design-checklist.md` — design phase checklist
+
+### Implementation phase
+- `sdlc/implementation/README.md` — implementation phase workflow and gate conditions
+- `sdlc/implementation/coding-standards.md` — coding conventions
+- `sdlc/implementation/git-workflow.md` — branch and commit rules
+- `sdlc/implementation/task-breakdown-template.md` — translate technical design into bounded tasks
+- `sdlc/implementation/implementation-checklist.md` — implementation phase checklist
+- `sdlc/implementation/testing-strategy.md` — test types, structure, and coverage expectations
+- `sdlc/implementation/environment-setup.md` — environment setup steps
+
+### Testing phase
+- `sdlc/testing/README.md` — testing phase overview and test type index
 
 ## Session closing protocol
 
-Before ending a session, commit all new or updated documents:
+Before ending a session, update project state and commit:
 git add docs/
 git commit -m "docs([phase]): [brief description]"
 git push

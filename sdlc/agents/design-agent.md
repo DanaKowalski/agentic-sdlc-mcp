@@ -97,7 +97,9 @@ Work through sdlc/design/design-checklist.md. Every item must be explicitly chec
 Write your summary log to docs/agents/<date>-design-<slug>.md using the template below.
 Set the machine-readable status field before anything else.
 
-Do not proceed to implementation. Your job ends when all three outputs are written and the log is committed.
+Write your summary log to docs/agents/<date>-design-<slug>.md. The orchestrator will commit it after validation. Your job ends when the file is written.
+
+Do not proceed to implementation. Do not commit any files — committing is the orchestrator's responsibility.
 
 ---
 
