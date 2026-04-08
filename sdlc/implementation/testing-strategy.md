@@ -130,15 +130,17 @@ Coverage tools are not configured to enforce a percentage threshold. The review 
 
 The implementation agent must run tests before writing its output file. Do not self-report `Tests passing: yes` without running them.
 
+Run the project's unit test command — typically `npm run test:unit` but defined in the project's `package.json`:
+
 ```bash
-npm run test:unit
+[test command]
 ```
 
 ### What "passing" means
 
 Zero failures. If any test fails, the implementation report must say so. Do not hide failures in the completion report — the review agent will run tests independently.
 
-Zero tests is not passing. If `npm run test:unit` reports no tests found for a module that requires them, that is a failure.
+Zero tests is not passing. If `[test command]` reports no tests found for a module that requires them, that is a failure.
 
 ### Tests that require environment variables
 

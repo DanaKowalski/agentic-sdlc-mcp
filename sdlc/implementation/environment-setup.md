@@ -27,7 +27,7 @@ Follow these steps before writing any code. Do not begin implementation until th
 4. Clone the repository (skip if already cloned):
    ```bash
    git clone <repository-url>
-   cd agentic-sdlc-mcp
+   cd <project-directory>
    ```
 
 5. Install dependencies:
@@ -40,7 +40,7 @@ Follow these steps before writing any code. Do not begin implementation until th
    ```bash
    npm run build
    ```
-   Expected outcome: no TypeScript errors, `dist/mcp-server/` directory created. If TypeScript errors appear, do not proceed — fix or report them before writing new code.
+   Expected outcome: no TypeScript errors, the project's build output directory is created. If TypeScript errors appear, do not proceed — fix or report them before writing new code.
 
 ---
 
@@ -68,25 +68,22 @@ If your task does not call external services, no environment variables are neede
    ```
    or exits with code 0 with no error output.
 
-8. Run the config drift check to confirm config state is consistent:
-   ```bash
-   npm run check:configs
-   ```
+8. If the project provides a config or state validation script, run it now and confirm it passes. Check the project's `package.json` scripts for the relevant command.
    This must pass before and after your changes. If it fails before you have made any changes, report it to the orchestrator — do not continue.
 
 ---
 
 ## Starting the MCP Server for Manual Testing
 
-9. After a successful build, start the server:
+9. After a successful build, start the server using the project's server start command (defined in the project's `package.json`):
    ```bash
-   npm run mcp:start
+   [your project's server start command]
    ```
    The server reads from `stdin` and writes to `stdout` using the MCP protocol. To test manually, connect an MCP client (such as Claude Desktop or a local MCP inspector) to the process.
 
 10. To rebuild and restart after making changes:
     ```bash
-    npm run build && npm run mcp:start
+    npm run build && [your project's server start command]
     ```
 
 ---

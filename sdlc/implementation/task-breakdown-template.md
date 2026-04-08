@@ -93,6 +93,9 @@ Files this agent must not touch:
 
 ## Worked Example — Add `search_issues` MCP Tool
 
+> **Note:** The paths, type names, and script names below are illustrative.
+> Replace them with the actual values for your project.
+
 The following is a complete, filled-out example. Use it as a pattern when completing tasks above.
 
 ---
@@ -107,20 +110,20 @@ The following is a complete, filled-out example. Use it as a pattern when comple
 
 ### Example Task 1 — Implement `search_issues` tool handler
 
-**Task (one sentence):** Implement the `search_issues` MCP tool handler in `src/tools/search-issues.ts` that accepts a `query` string and optional `labels` array and returns a paginated list of matching GitHub issues.
+**Task (one sentence):** Implement the `search_issues` MCP tool handler in `[src]/[module]/search-issues.ts` that accepts a `query` string and optional `labels` array and returns a paginated list of matching GitHub issues.
 
-**Source design artifact:** Technical Design §4 (API / Interface Design), ADR-012
+**Source design artifact:** Technical Design §4 (API / Interface Design), ADR-{{NUMBER}}
 
 **Research required:** yes  
 **Research reason:** The existing MCP tool registration pattern must be read before adding a new tool to confirm the registration approach and argument schema conventions used in this codebase.
 
 **Parallel-safe:** no  
-**Conflicts with:** Example Task 2 (both write to `src/tools/search-issues.ts`)
+**Conflicts with:** Example Task 2 (both write to `[src]/[module]/search-issues.ts`)
 
 #### File allowlist
 
-- `src/tools/search-issues.ts`
-- `src/tools/search-issues.test.ts`
+- `[src]/[module]/search-issues.ts`
+- `[src]/[module]/search-issues.test.ts`
 
 #### File blocklist
 
@@ -128,13 +131,13 @@ The following is a complete, filled-out example. Use it as a pattern when comple
 - `.github/`
 - `config/`
 - `docs/` (except `docs/agents/`)
-- `src/index.ts` (registration is handled in Example Task 3)
+- `[src]/index.[ext]` (registration is handled in Example Task 3)
 - Any other file not listed above
 
 #### Acceptance criteria
 
 1. The tool handler accepts `{ query: string; labels?: string[] }` and returns `{ issues: Issue[]; nextPage: number | null }` where `Issue` matches the type defined in Technical Design §3.
-2. If the GitHub API returns an error, the handler throws a typed `McpToolError` with the HTTP status code included in the message — it does not swallow the error or return an empty array silently.
+2. If the GitHub API returns an error, the handler throws a typed `[ProjectError]` with the HTTP status code included in the message — it does not swallow the error or return an empty array silently.
 3. Unit tests in `search-issues.test.ts` cover: the happy path with results, the happy path with zero results, and the error path (GitHub API returns 500).
 4. `npm run test:unit` passes with zero failures after implementation.
 
@@ -150,11 +153,11 @@ The following is a complete, filled-out example. Use it as a pattern when comple
 **Research reason:** N/A — research agent output from Example Task 1 covers the handler interface.
 
 **Parallel-safe:** no  
-**Conflicts with:** Example Task 1 (both write to `src/tools/search-issues.test.ts`)
+**Conflicts with:** Example Task 1 (both write to `[src]/[module]/search-issues.test.ts`)
 
 #### File allowlist
 
-- `src/tools/search-issues.test.ts`
+- `[src]/[module]/search-issues.test.ts`
 
 #### File blocklist
 
@@ -162,7 +165,7 @@ The following is a complete, filled-out example. Use it as a pattern when comple
 - `.github/`
 - `config/`
 - `docs/` (except `docs/agents/`)
-- `src/tools/search-issues.ts` (must not edit source — only the test file)
+- `[src]/[module]/search-issues.ts` (must not edit source — only the test file)
 
 #### Acceptance criteria
 
@@ -175,7 +178,7 @@ The following is a complete, filled-out example. Use it as a pattern when comple
 
 ### Example Task 3 — Register `search_issues` in the MCP server
 
-**Task (one sentence):** Register the `search_issues` tool handler in `src/index.ts` following the existing tool registration pattern so the tool is available to MCP clients.
+**Task (one sentence):** Register the `search_issues` tool handler in `[src]/index.[ext]` following the existing tool registration pattern so the tool is available to MCP clients.
 
 **Source design artifact:** Technical Design §5 (Component Design — Server Registration)
 
@@ -183,11 +186,11 @@ The following is a complete, filled-out example. Use it as a pattern when comple
 **Research reason:** N/A — registration pattern confirmed during Example Task 1 research.
 
 **Parallel-safe:** yes  
-**Conflicts with:** none (this task writes only to `src/index.ts`; no other task in this breakdown touches that file)
+**Conflicts with:** none (this task writes only to `[src]/index.[ext]`; no other task in this breakdown touches that file)
 
 #### File allowlist
 
-- `src/index.ts`
+- `[src]/index.[ext]`
 
 #### File blocklist
 
@@ -195,11 +198,11 @@ The following is a complete, filled-out example. Use it as a pattern when comple
 - `.github/`
 - `config/`
 - `docs/` (except `docs/agents/`)
-- `src/tools/search-issues.ts`
-- `src/tools/search-issues.test.ts`
+- `[src]/[module]/search-issues.ts`
+- `[src]/[module]/search-issues.test.ts`
 
 #### Acceptance criteria
 
 1. `search_issues` appears in the tool list returned by the MCP server's tool discovery endpoint after registration.
-2. The registration follows the identical pattern used by at least one existing tool in `src/index.ts` — no new registration mechanism is introduced.
+2. The registration follows the identical pattern used by at least one existing tool in `[src]/index.[ext]` — no new registration mechanism is introduced.
 3. `npm run build` succeeds with zero TypeScript errors after registration.
