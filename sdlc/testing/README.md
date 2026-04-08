@@ -1,6 +1,20 @@
-# Testing Phase Templates
+# Testing Phase
 
 This folder contains templates and guides used during the **testing** phase.
+
+---
+
+## When This Phase Begins
+
+The testing phase begins when ALL of the following are true:
+
+- Implementation is merged to `main`
+- All review agent verdicts for this feature are `approved` or `approved-with-notes`
+- No `blocked` verdicts remain open in `docs/agents/`
+
+Do not begin testing if any of these conditions are unmet. Return to the implementation phase.
+
+---
 
 ## The Role of the Testing Phase
 
@@ -8,39 +22,67 @@ The testing phase is distinct from writing tests during implementation. Implemen
 
 The testing phase happens after implementation is merged to `main` and before deployment begins.
 
+---
+
 ## Test Types
 
-The following test types apply to this project. For implementation-time conventions (where files live, how to mock, how to run), see `sdlc/implementation/testing-strategy.md`.
+The following test types apply in this phase. For implementation-time conventions (where files live, how to mock, how to run), see `sdlc/implementation/testing-strategy.md`.
 
 | Type | When required | Owner |
 |---|---|---|
 | **Unit** | All pure functions and data transformation logic | Implementation agent during implementation |
-| **Integration** | All MCP tool handlers invoked through the MCP server context | Implementation agent during implementation |
-| **Contract** | External MCP server integrations where schema may drift independently | Optional — when called for by the design document |
+| **Integration** | All tool handlers invoked through server context | Implementation agent during implementation |
+| **Contract** | External integrations where schema may drift independently | Optional — when called for by the design document |
 | **End-to-end / Acceptance** | Full user-facing flows that exercise multiple components together | Testing phase — not implementation phase |
-| **Regression** | Before any deployment after a defect fix | Testing phase |
+| **Regression** | Before any deployment after a defect fix, or when shared code changes | Testing phase |
 
-## What Lives Here
+---
 
-This directory is the home for testing-phase artifacts. The following templates are planned and will be added as the testing phase is built out:
+## Available Templates
 
 ### Test Plan Template
 
-_Placeholder — to be created during the testing phase build-out._
+**`test-plan-template.md`** — filled out by the orchestrator before testing begins. Defines what scenarios must be verified, maps each to a PRD acceptance criterion, records entry and exit conditions, and captures any defects found. Every release that goes through the testing phase needs a completed test plan.
 
-Used by the orchestrator to define what scenarios must be tested before a release, which test types apply, and what the pass/fail criteria are.
+Use it by copying it to `docs/testing/<date>-<slug>-test-plan.md` and filling in all sections before running any scenarios.
 
 ### QA Checklist
 
-_Placeholder — to be created during the testing phase build-out._
+**`qa-checklist.md`** — completed after test scenarios are run and before deployment is approved. Verifies the feature is ready to ship across functional, non-functional, regression, and deployment readiness dimensions.
 
-A structured checklist for verifying that a feature meets its acceptance criteria before being approved for deployment.
+The test plan asks what to test. The QA checklist asks whether the feature is ready. Both must be completed before deployment.
 
 ### Regression Testing Guide
 
-_Placeholder — to be created during the testing phase build-out._
+**`regression-testing-guide.md`** — explains when regression testing applies, how to identify what to test, how to run both automated and manual regression, and what to do when a regression is found. Read this before running any TEST-R scenarios.
 
-Defines which scenarios must be re-verified after any change, and how to run the regression suite.
+---
+
+## Recommended Workflow
+
+1. Confirm entry conditions are met
+2. Copy `test-plan-template.md` to `docs/testing/<date>-<slug>-test-plan.md`
+3. Fill in scope, map acceptance criteria to TEST-* scenarios
+4. If release touches shared code or includes a defect fix: add TEST-R regression scenarios following `regression-testing-guide.md`
+5. Run all scenarios and record Pass / Fail in the test plan
+6. Record any defects found in the test plan defects table
+7. Complete `qa-checklist.md`
+8. Complete test plan sign-off section
+9. Update `docs/memory/project-state.md` to reflect testing complete
+
+---
+
+## Definition of Done
+
+The testing phase is complete when:
+
+- All TEST-* scenarios in the test plan have a Pass result
+- The QA checklist is fully completed with no open critical or high severity defects
+- The test plan sign-off section is completed with a Pass or Conditional pass verdict
+- `docs/memory/project-state.md` is updated to reflect testing complete
+- Any deferred defects are documented in the test plan with severity and justification
+
+---
 
 ## Related Documents
 

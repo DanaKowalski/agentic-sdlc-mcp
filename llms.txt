@@ -27,15 +27,14 @@ Fetch files as you need them. Do not try to load all files at once — fetch wha
 3. Fetch `sdlc/overview.md`
 
 ### Read or create locally (your project directory)
-4. Read `docs/memory/project-state.md` in your local project
-   If it does not exist, this is a new project — create it locally before proceeding
+4. Check for `docs/memory/project-state.md` in your local project directory.
+   If it does not exist — STOP. Create it locally before saying anything to the user.
+   Do not greet, do not ask questions, do not proceed until the file exists on disk.
 
 Never create or write files to the sdlc-gitmcp server. It is read-only.
 All project state, agent outputs, and docs live in your local project directory.
 
-Then tell the user what you found and ask where they want to pick up.
-
-Do not skip step 2. A session that starts without reading project state will duplicate work or contradict previous decisions.
+After completing the above, tell the user what you found and ask where they want to pick up.
 
 ## Available tools
 
@@ -76,7 +75,7 @@ Full rules: fetch `sdlc/agents/orchestrator.md`
 
 ### Session and memory
 - `sdlc/memory/quick-ref.md` — session open/close sequence, all commands, agent triggers (fetch at every session start)
-- `docs/memory/project-state.md` — live project state (fetch at every session start)
+- `docs/memory/project-state.md` — live project state (read or create locally at every session start)
 - `sdlc/agents/memory-protocol.md` — full memory rules
 
 ### Agent system
@@ -110,13 +109,27 @@ Full rules: fetch `sdlc/agents/orchestrator.md`
 - `sdlc/implementation/environment-setup.md` — environment setup steps
 
 ### Testing phase
-- `sdlc/testing/README.md` — testing phase overview and test type index
+- `sdlc/testing/README.md` — testing phase overview, gate conditions, and workflow
+- `sdlc/testing/test-plan-template.md` — test plan template (copy to docs/testing/ per release)
+- `sdlc/testing/qa-checklist.md` — QA checklist to complete before deployment
+- `sdlc/testing/regression-testing-guide.md` — when and how to run regression tests
+
+### Maintenance phase
+- `sdlc/maintenance/README.md` — maintenance phase overview and cadence table
+- `sdlc/maintenance/mcp-connection-review.md` — keeping MCP tool connections current
+- `sdlc/maintenance/adr-review.md` — reviewing, updating, and superseding ADRs
+- `sdlc/maintenance/memory-hygiene.md` — keeping project state accurate over time
+- `sdlc/maintenance/dependency-review.md` — monthly dependency and technical debt review
+- `sdlc/maintenance/process-review.md` — quarterly review of whether the process fits
+- `sdlc/maintenance/maintenance-checklist.md` — consolidated quarterly health check
 
 ## Session closing protocol
 
 Before ending a session, update project state and commit:
+```
 git add docs/
 git commit -m "docs([phase]): [brief description]"
 git push
+```
 
 This ensures the next session — in any tool — can read current state via GitMCP.
