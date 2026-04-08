@@ -1,3 +1,4 @@
+<!-- Maintainers: see .github/MAINTAINER.md before working on this repo directly -->
 # CLAUDE.md — Claude Code Specific Notes
 
 This file contains settings and notes specific to Claude Code.

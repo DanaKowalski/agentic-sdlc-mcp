@@ -12,8 +12,7 @@ const CONFIG_PATTERNS = [
   /^\.cursorrules$/,
   /^\.windsurfrules$/,
   /^AGENTS\.md$/,
-  /^CLAUDE\.md$/,
-  /^llms\.txt$/,
+  /^CLAUDE\.md$/
 ];
 
 // Files that should NEVER trigger the drift check (even if they change)

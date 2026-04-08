@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__sdlc-gitmcp__fetch_agentic_sdlc_mcp_docs",
+      "mcp__sdlc-gitmcp__search_agentic_sdlc_mcp_code",
+      "mcp__sdlc-gitmcp__search_agentic_sdlc_mcp_docs"
+    ]
+  }
+}
