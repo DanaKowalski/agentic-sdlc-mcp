@@ -9,6 +9,13 @@ This repo gives AI assistants:
 - Active slash commands for creating SDLC deliverables
 - A live state layer so any session in any tool can pick up where the last one left off
 
+## Scope
+
+This file describes how to USE this SDLC framework in a project.
+If you are working inside this repo to maintain or extend the framework itself,
+read CLAUDE.md first — most maintenance tasks do not use the agent protocol.
+
+
 ## How to orient at session start
 
 Read these files in order to understand current project state:
@@ -52,7 +59,7 @@ Full rules: `sdlc/agents/orchestrator.md`
 
 - `sdlc/overview.md` — phase definitions and rules
 - `AGENTS.md` — core agent rules and conventions
-- `docs/memory/project-state.md` — live project state (always read or create at session start)
+- `docs/memory/project-state.md` — live project state (Create if this does not exist, otherwise read to obtain current project state)
 - `sdlc/agents/orchestrator.md` — orchestrator and subagent triggers
 - `sdlc/planning/README.md` — planning phase workflow and templates
 - `sdlc/design/README.md` — design phase workflow and templates

@@ -1,3 +1,6 @@
+> This protocol applies when building features with this framework — either in this repo
+> or in a project that has adopted it. It does NOT apply to routine maintenance of this repo.
+> See CLAUDE.md for the distinction.
 # AGENTS.md — Core Agent Rules & Conventions
 
 This is the central, model-agnostic rule set for all agents in this SDLC foundation.  
