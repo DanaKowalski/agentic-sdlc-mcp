@@ -1,34 +1,44 @@
 # Planning Phase Checklist
 
-Use this checklist after running `/generate_prd` to ensure the planning phase is complete before moving to project setup or implementation.
+Use this checklist to verify the full planning phase is complete before moving to design or implementation.
 
-## Core Deliverables
-- [ ] PRD is created and populated
-- [ ] All sections in PRD are filled or marked as N/A
+---
+
+## Requirements Analysis
+
+- [ ] Feature complexity assessed and mode selected (collaborative or autonomous)
+- [ ] Mode selection recorded in the requirements document
+- [ ] Requirements document exists at `docs/planning/<date>-<slug>-requirements.md`
+- [ ] All questions in the elicitation session are answered or explicitly deferred
+- [ ] All `[agent-inferred, flagged]` items have been reviewed by the user
+- [ ] Flagged items resolved: confirmed, corrected, or accepted with documented reasoning
+- [ ] No open questions remain unresolved (or deferred items documented with justification)
+- [ ] Requirements document status set to: Approved
+
+## PRD
+
+- [ ] PRD exists at `docs/planning/<date>-<slug>-prd.md`
+- [ ] PRD header references the requirements document
+- [ ] All PRD sections filled or explicitly marked N/A with a reason
 - [ ] Success metrics are defined and measurable
-- [ ] Features are prioritized (MoSCoW or similar)
+- [ ] Features are prioritized (MoSCoW)
 - [ ] Out of scope items are clearly listed
-- [ ] Open questions are documented
+- [ ] Section 4 acceptance criteria reference REQ-IDs from the requirements document
+- [ ] Deployment decision completed in Section 6 (Yes / No / Not yet decided)
+- [ ] PRD status set to: Approved
 
 ## Review & Approval
-- [ ] PRD has been reviewed by stakeholders (if applicable)
-- [ ] All critical open questions have been answered
-- [ ] PRD is approved and status changed to "Approved"
-- [ ] If needed, Agile SRS has been created for technical details
+
+- [ ] All critical open questions resolved before approval
+- [ ] Stakeholders reviewed (if applicable)
+- [ ] PRD approved by: [name]
 
 ## Readiness Check
-- [ ] User stories have clear acceptance criteria
-- [ ] Non-functional requirements are defined
-- [ ] Risks, assumptions, and dependencies are identified
-- [ ] High-level timeline or next milestones are outlined
 
-## Completion Criteria
-- [ ] Planning checklist is 100% complete
-- [ ] All team members understand the scope and goals
-- [ ] Project is ready for `/project_setup` or implementation phase
-
-**Date Completed:** 
-**Approved by:**
+- [ ] User stories have clear acceptance criteria tied to REQ-IDs
+- [ ] Non-functional requirements defined
+- [ ] Risks, assumptions, and dependencies identified
+- [ ] Deployment decision is explicit — not left blank
 
 ## Phase Routing
 
@@ -36,4 +46,9 @@ Use this checklist after running `/generate_prd` to ensure the planning phase is
 - [ ] If feature introduces an external integration → design phase required
 - [ ] If feature changes an API surface → design phase required
 - [ ] If feature touches auth or security → design phase required
-- [ ] If none of the above → document reasoning for skipping design phase here: ___ 
+- [ ] If none of the above → document reasoning for skipping design phase here: ___
+
+---
+
+**Date Completed:**
+**Approved by:**
