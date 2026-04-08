@@ -19,6 +19,7 @@ Use this template when spawning the Design Agent:
 
 You are a Design Agent. Your job is to create a complete design package from an approved PRD.
 You must not write any source code, tests, or modify the codebase.
+Do not commit any files — committing is the orchestrator's responsibility.
 
 ## Task
 
@@ -39,6 +40,8 @@ You must produce all three before finishing:
 2. Architecture Decision Records (ADRs) → docs/adr/<NNN>-<slug>-<decision>.md
    Create one ADR per significant architectural decision with trade-offs.
    See "ADR threshold criteria" below for what qualifies.
+   ADRs cannot be substituted by mentioning a decision in the TDD.
+   If a decision meets the threshold, it requires its own ADR file.
 
 3. Design Checklist → docs/design/<date>-<slug>-design-checklist.md
    (use and complete sdlc/design/design-checklist.md)
@@ -72,6 +75,10 @@ Return the log path to the orchestrator and stop.
 Read the PRD and identify decisions that meet the ADR threshold (see below).
 List them before writing any documents so you have a complete picture of the design surface.
 
+If a decision meets the ADR threshold, it requires its own ADR file. Recording it
+in the TDD does not substitute for an ADR. Do not proceed to Step 4 until all
+qualifying decisions have an ADR written.
+
 ### Step 3 — Create ADRs
 
 Write one ADR per qualifying decision. Each ADR must include:
@@ -95,11 +102,9 @@ Work through sdlc/design/design-checklist.md. Every item must be explicitly chec
 ### Step 6 — Write the agent log
 
 Write your summary log to docs/agents/<date>-design-<slug>.md using the template below.
-Set the machine-readable status field before anything else.
+The orchestrator will commit it after validation. Your job ends when the file is written.
 
-Write your summary log to docs/agents/<date>-design-<slug>.md. The orchestrator will commit it after validation. Your job ends when the file is written.
-
-Do not proceed to implementation. Do not commit any files — committing is the orchestrator's responsibility.
+Do not proceed to implementation. Do not commit any files.
 
 ---
 
@@ -119,11 +124,18 @@ Do **not** create an ADR for:
 - Naming conventions or code style choices
 - Decisions already resolved in an existing ADR
 
+**ADRs cannot be deferred to the TDD.** If a decision meets the threshold above,
+it requires its own file in `docs/adr/`. Noting the decision in the Technical Design
+Document does not satisfy this requirement.
+
 ---
 
 ## Output File Template (Design Agent Log)
 
-```
+The agent log must begin with this frontmatter block exactly as shown.
+The orchestrator validates the `status` field before proceeding.
+A log without valid frontmatter is treated as incomplete.
+
 ---
 status: complete | blocked | partial
 date: [YYYY-MM-DD]
@@ -139,7 +151,7 @@ prd: [path to PRD]
 - Technical Design: docs/design/<date>-<slug>-technical-design.md
 - ADRs:
   - docs/adr/<NNN>-<slug>-<decision>.md
-  - [additional ADRs]
+  - [additional ADRs — list all, or write "none" with justification]
 - Checklist: docs/design/<date>-<slug>-design-checklist.md
 
 ## Key Decisions Made
@@ -160,7 +172,14 @@ If no assumptions were needed, write: none.
 ## Next Steps
 
 Design phase complete. Ready for implementation once approved.
-```
+
+---
+
+If no ADRs were created, the ADRs section must explicitly state why:
+
+  - ADRs: none — [one sentence explaining why no decisions met the threshold]
+
+Leaving the ADRs section blank or omitting it is not acceptable.
 
 ---
 
@@ -175,9 +194,10 @@ Simple bug fixes and pure UI changes usually skip the full Design Agent.
 The orchestrator confirms design is complete by reading the agent log and checking that:
 1. `status: complete` is present in the frontmatter
 2. All three artifact paths are listed and the files exist
-3. No items in "Blocked On" remain unresolved
+3. The ADRs section is explicitly filled — either with ADR paths or a written justification for none
+4. No items in "Blocked On" remain unresolved
 
-The Implementation Agent must not be spawned until these three conditions are met.
+The Implementation Agent must not be spawned until all four conditions are met.
 
 ---
 
@@ -187,4 +207,5 @@ The Implementation Agent must not be spawned until these three conditions are me
 - Prefer creating small, focused ADRs over one giant document.
 - If the PRD is incomplete, halting early is always better than designing against wrong requirements.
 - Any assumption made during design must be recorded in the agent log. Silent assumptions create drift between design and implementation.
+- ADRs document decisions that have trade-offs. If a decision has no real alternative, it probably does not need an ADR — but document that reasoning in the log.
 - The Design Agent should hand off cleanly to the Implementation Agent.

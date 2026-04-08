@@ -39,7 +39,7 @@ Files this agent may write or edit:
 - `{{FILE_PATH_2}}`
 
 ### File blocklist
-
+<!-- Adjust this list to match your project's protected directories -->
 Files this agent must not touch:
 
 - `sdlc/`

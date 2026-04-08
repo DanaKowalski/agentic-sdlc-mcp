@@ -26,7 +26,7 @@ Use this checklist before starting implementation.
 - [ ] Implementation tasks can be clearly broken down
 - [ ] Team understands the technical approach
 - [ ] Design phase is approved
-- [ ] ADR threshold evaluated for every major decision area (data model, API surface, auth, integrations, performance trade-offs)
+- [ ] ADR threshold evaluated for every decision area — any qualifying decision has its own ADR file (not just mentioned in the TDD)
 - [ ] Phase gate: approved by [name] before implementation begins
 
 **Date Completed:** 

@@ -26,14 +26,18 @@ current documentation. Do not rely on training data for package specifics — it
 
 ### Standard Session Opening Pattern
 
-1. Fetch `sdlc/memory/quick-ref.md` from sdlc-gitmcp — commands, triggers, agent roles
-2. Read `docs/memory/project-state.md` **in your local project directory**
-3. If it does not exist locally, this is a new project — create it locally before proceeding
-4. Tell the user what you found and ask:
-   "We are in the [phase] phase. Open work: [list]. Last session: [summary]. Where would you like to pick up?"
+1. Fetch `sdlc/memory/quick-ref.md` from sdlc-gitmcp
+2. Check for `docs/memory/project-state.md` in your local project directory.
+   If it does not exist — STOP. Create it locally before saying anything to the user.
+   Do not greet, do not ask questions, do not proceed until the file exists on disk.
+3. Read the file and tell the user what you found and ask where to pick up
 
 Do not skip step 2. Do not look for project-state.md on the remote framework server —
 it does not exist there. It lives in your project.
+
+Before doing any design work, fetch and read sdlc/agents/design-agent.md.
+The design phase is not complete until all three artifacts exist:
+technical design document, at least one ADR evaluation, and completed design checklist.
 
 ### Standard Session Closing Pattern
 
@@ -100,6 +104,19 @@ The system uses these agents:
 
 All agent outputs must be written to `docs/agents/<date>-<role>-<slug>.md`
 in your local project directory and committed immediately.
+
+## Subagents must be spawned, not simulated
+
+Use your tool's native mechanism — Claude Code: Task tool, Roo: new_task, 
+Cursor: new Composer window, Windsurf: separate Cascade session.
+
+Writing a docs/agents/ file directly from orchestrator context is not spawning 
+a subagent. If you find yourself writing an agent output file directly, stop and 
+spawn the agent instead.
+
+The review agent is not optional. It runs after every implementation task.
+Do not mark implementation complete without a review agent verdict of 
+approved or approved-with-notes.
 
 ---
 

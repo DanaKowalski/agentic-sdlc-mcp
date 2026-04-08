@@ -34,5 +34,6 @@ This folder contains lightweight templates used during the **design** phase.
 - Keep design artifacts lean and focused.
 - ADRs are for recording **why** a decision was made. The technical design document is for describing **how** it will be built.
 - Design phase should be completed before significant implementation work begins (except for simple bug fixes or UI-only changes).
+- ADR decisions cannot be deferred to the TDD. If a decision meets the ADR threshold, it gets its own ADR file. Documenting a decision in the TDD  does not substitute for an ADR.
 
 Templates in this folder follow a **lean agile** approach.

@@ -8,7 +8,7 @@ This document defines how agents read, write, and maintain memory across session
 
 Memory is structured state written to files. It is not chat history, not in-context summaries, and not verbal output. If it is not written to a file and committed, it does not exist for the next session.
 
-There are two kinds: 
+There are two kinds:
 
 | Kind | What it is | Where it lives | Updated when |
 |------|-----------|----------------|--------------|
@@ -21,14 +21,18 @@ Agent output memory is already covered in `orchestrator.md`. This document cover
 
 ## Session start — what to read
 
-Every session opens with these two reads, in this order. No exceptions.
+Every session opens with these steps in this exact order. No exceptions.
 
 ```
 1. sdlc/memory/quick-ref.md        — how we work (commands, triggers, roles)
 2. docs/memory/project-state.md    — where we are (phase, open work, last session)
 ```
 
-If `docs/memory/project-state.md` does not exist, the project is new. Create it before doing any other work.
+**If `docs/memory/project-state.md` does not exist:**
+STOP. Create it locally in the project directory before doing anything else —
+before greeting the user, before asking questions, before any other action.
+Do not say anything to the user until the file exists on disk and you can confirm the path.
+Use the exact schema defined in "Project state file format" below.
 
 After reading both files, tell the user what you found:
 
@@ -47,6 +51,7 @@ Before ending any session, update `docs/memory/project-state.md` with:
 - What is still open
 - Any decisions made that are not yet in an ADR
 - One sentence summary for the next session to read
+- Set `session_status` to `closed`
 
 Then commit:
 
@@ -70,6 +75,7 @@ If you do not push, the next session in a different tool cannot see the update v
 **Last updated**: YYYY-MM-DD
 **Current phase**: [Planning | Design | Implementation | Testing | Deployment | Operations]
 **Active branch**: [branch name or "none"]
+**Session status**: [open | closed]
 
 ---
 
@@ -95,7 +101,27 @@ If you do not push, the next session in a different tool cannot see the update v
 [Anything preventing progress. Empty if none.]
 ```
 
-**Length limit**: this file must stay under 300 words. If it grows beyond that, move completed items to `docs/memory/archive.md` and keep only current state here.
+## Required field names — do not deviate
+
+The following field names are required exactly as written. Agents at session start
+look for these exact strings. Any variation will cause the file to be misread.
+
+- `**Last updated**:` — not `## Last Updated`, not `Last updated:`
+- `**Current phase**:` — not `## Current Phase`, not `Phase:`
+- `**Active branch**:` — not `## Branch`, not `Branch:`
+- `**Session status**:` — not `## Status`, not `Status:`
+
+If you find a project-state.md that uses different field names, rewrite it to match
+this schema before doing any other work.
+
+**Session status usage:**
+- Set to `open` when you create or update the file at session start
+- Set to `closed` when you update it at session end before committing
+- If a session starts and finds `session_status: open`, the previous session did not
+  close cleanly — note this in Last session summary and proceed
+
+**Length limit**: this file must stay under 300 words. If it grows beyond that, move
+completed items to `docs/memory/archive.md` and keep only current state here.
 
 ---
 
@@ -153,6 +179,8 @@ Memory that is stale is worse than no memory — it causes agents to act on outd
 | Archive completed items when file exceeds 300 words | Long memory files waste tokens on irrelevant history |
 | If state is uncertain, re-read `docs/agents/` recent outputs | Agent outputs are the ground truth for what was done |
 | Never edit memory to hide failures or blockers | Accurate state prevents repeated mistakes |
+| Never update memory mid-session | Creates inconsistent state — write once at session end |
+| If session_status is open at session start | Previous session did not close cleanly — note it and proceed |
 
 ---
 
@@ -174,8 +202,10 @@ It does not change unless the SDLC itself changes. Models read it to orient to t
 | Anti-pattern | What goes wrong |
 |---|---|
 | Skipping session start reads | Agent duplicates completed work or contradicts past decisions |
+| Greeting the user before creating project-state.md | Memory never gets created — agent proceeds without it |
 | Not committing memory at session end | Next session starts blind |
 | Writing memory in chat only | Lost on session end, invisible to other tools |
 | Storing state in tool-specific memory | Not portable — breaks when switching tools or models |
 | Letting project-state.md grow unbounded | Wastes tokens, buries current state in history |
 | Updating memory mid-session | Creates inconsistent state — write once at session end |
+| Using non-standard field names | File is misread by agents expecting exact field names |
