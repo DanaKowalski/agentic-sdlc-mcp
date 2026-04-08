@@ -24,10 +24,47 @@ What is the change that we're proposing and why?
 - Consequence 1
 - Consequence 2
 
-## Alternatives Considered
+## Options Considered
 
-- Alternative 1: [brief reason why not chosen]
-- Alternative 2: [brief reason why not chosen]
+### Option 1: [Name]
+
+[Brief description of this option]
+
+**Trade-offs:**
+- Pro: [advantage]
+- Pro: [advantage]
+- Con: [disadvantage]
+- Con: [disadvantage]
+
+Why not chosen: [One sentence explaining why this option was rejected]
+
+---
+
+### Option 2: [Name]
+
+[Brief description of this option]
+
+**Trade-offs:**
+- Pro: [advantage]
+- Pro: [advantage]
+- Con: [disadvantage]
+- Con: [disadvantage]
+
+Why not chosen: [One sentence explaining why this option was rejected]
+
+---
+
+### Option 3: [Name] *(chosen)*
+
+[Brief description of this option]
+
+**Trade-offs:**
+- Pro: [advantage]
+- Pro: [advantage]
+- Con: [disadvantage]
+- Con: [disadvantage]
+
+Why chosen: [One sentence linking back to the Decision section rationale]
 
 ## References
 

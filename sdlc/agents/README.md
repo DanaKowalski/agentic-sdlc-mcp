@@ -2,10 +2,11 @@
 
 This directory defines the subagent architecture for this repo. The system is prescriptive — agents follow fixed rules, not guidelines.
 
-## The three agents
+## The four agents
 
 | Agent | Role | Reads | Writes |
 |-------|------|-------|--------|
+| Design | Produce design package from approved PRD | PRD, sdlc/ docs | `docs/design/`, `docs/adr/`, `docs/agents/*-design-*.md` |
 | Research | Explore and report | Source files, docs, sdlc-gitmcp | `docs/agents/*-research-*.md` |
 | Implementation | Build bounded tasks | Source files, research output | Source files + `docs/agents/*-implementation-*.md` |
 | Review | Verify against standards | Source files, implementation output, sdlc/ docs | `docs/agents/*-review-*.md` |
@@ -14,7 +15,9 @@ This directory defines the subagent architecture for this repo. The system is pr
 
 ```
 orchestrator
-  → spawns research agent (if trigger 1 or 2 active)
+  → (Trigger 0) spawns design agent if architectural decisions exist
+  → reads design output from docs/agents/ + docs/design/
+  → (Trigger 1/2) spawns research agent if codebase is unknown
   → reads research output from docs/agents/
   → spawns implementation agent(s) (parallel if independent)
   → reads implementation output from docs/agents/
