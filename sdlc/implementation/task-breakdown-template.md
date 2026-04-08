@@ -72,6 +72,7 @@ Files this agent must not touch:
 
 - `{{FILE_PATH_1}}`
 
+<!-- Adjust the blocklist below to match your project's protected directories -->
 ### File blocklist
 
 - `sdlc/`

@@ -17,7 +17,7 @@ Repeat this block for each task in the breakdown. Copy and label with the task t
 
 - [ ] Implementation agent output file exists at `docs/agents/<date>-implementation-<slug>.md`
 - [ ] Status in output file is: `complete` (not `partial`, not `blocked`)
-- [ ] Tests written and passing — `npm run test:unit` confirms zero failures
+- [ ] Tests written and passing — `[test command]` confirms zero failures
 - [ ] No `console.log`, no commented-out code, no implicit `any` (per `coding-standards.md`)
 - [ ] Review agent spawned and verdict is `approved` or `approved-with-notes`
 - [ ] Review output committed to `docs/agents/` before this task is marked done
@@ -28,7 +28,7 @@ Repeat this block for each task in the breakdown. Copy and label with the task t
 - [ ] All review verdicts are `approved` or `approved-with-notes` — no `blocked` verdicts open
 - [ ] All `approved-with-notes` items logged and scheduled for follow-up (not silently dropped)
 - [ ] PR opened with references to PRD, technical design document, and review report paths in the description
-- [ ] CI passes: type-check, build, config drift check all green
+- [ ] CI passes: all required checks defined in the project's CI workflow are green.
 - [ ] Squash merged to `main` per `git-workflow.md`
 - [ ] `docs/memory/project-state.md` updated and pushed
 

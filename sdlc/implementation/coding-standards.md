@@ -12,6 +12,7 @@ Language: TypeScript. Runtime: Node 18+. Modules: ESM (`"type": "module"`).
 - Export types explicitly — do not rely on inference leaking through
 - `async`/`await` over raw Promises
 - Handle errors explicitly — no silent catches
+- All exported functions must have explicit return types
 
 ## Naming
 
@@ -46,6 +47,10 @@ Language: TypeScript. Runtime: Node 18+. Modules: ESM (`"type": "module"`).
 - Comments explain *why*, not *what*
 - If you need a comment to explain what the code does, simplify the code first
 - JSDoc on all exported functions
+
+## Logging
+- No `console.log` in production code — use a named logger
+- `console.log` is acceptable only in one-off scripts never imported by other modules
 
 ## Testing
 
