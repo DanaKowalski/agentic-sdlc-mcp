@@ -21,11 +21,17 @@ Fetch files as you need them. Do not try to load all files at once — fetch wha
 
 ## How to orient at session start
 
-Fetch and read these files in order before doing any work:
+### Fetch from sdlc-gitmcp (remote framework — read only)
+1. Fetch `sdlc/memory/quick-ref.md`
+2. Fetch `AGENTS.md`
+3. Fetch `sdlc/overview.md`
 
-1. `sdlc/memory/quick-ref.md` — commands, agent triggers, session sequence (one page)
-2. `docs/memory/project-state.md` — current phase and open work (create if it does not exist)
-3. `AGENTS.md` — core agent rules, conventions, and tools
+### Read or create locally (your project directory)
+4. Read `docs/memory/project-state.md` in your local project
+   If it does not exist, this is a new project — create it locally before proceeding
+
+Never create or write files to the sdlc-gitmcp server. It is read-only.
+All project state, agent outputs, and docs live in your local project directory.
 
 Then tell the user what you found and ask where they want to pick up.
 
@@ -37,14 +43,20 @@ Do not skip step 2. A session that starts without reading project state will dup
 - **sdlc-gitmcp** (this server, SSE): live read access to this repo's files and state
 - **sdlc** (stdio MCP, local): exposes slash commands
 
-## Available commands (local)
+## Available commands
 
-- `/generate_prd` — scaffold a Product Requirements Document
-- `/create_technical_design` — run full design phase (technical design + ADRs + checklist)
-- `/create_adr` — create a single Architecture Decision Record
-- `/plan_sprint` — create a sprint plan
-- `/gen_test_plan` — test plan scaffold
-- `/release_notes` — draft from git log
+These commands are available when running the sdlc MCP server locally.
+If you are connected via sdlc-gitmcp (remote), these commands are not available —
+use the templates directly instead.
+
+| Command | Template to use instead |
+|---------|------------------------|
+| `/generate_prd` | Fetch and follow `sdlc/planning/PRD-template.md` |
+| `/create_technical_design` | Fetch and follow `sdlc/design/technical-design-template.md` |
+| `/create_adr` | Fetch and follow `sdlc/design/architecture-decision-record-template.md` |
+| `/plan_sprint` | No template yet — describe sprint goals in `docs/planning/` |
+| `/gen_test_plan` | Fetch and follow `sdlc/testing/README.md` |
+| `/release_notes` | Draft from git log manually |
 
 ## Subagent system
 
