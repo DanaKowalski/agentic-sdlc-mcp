@@ -32,10 +32,13 @@
 
 ## 5. Component Design
 
-- Component 1
-  - Responsibilities
-  - Key logic
-  - Dependencies
+### [Component Name]
+
+- **Responsibilities**: What this component is accountable for delivering
+- **Inputs**: What it receives and from where (caller, event, external system, etc.)
+- **Outputs**: What it produces and where it goes (return value, written file, emitted event, etc.)
+- **Non-responsibilities**: What this component explicitly does NOT do (prevents scope creep and clarifies boundaries)
+- **Dependencies**: Other components or services this component relies on
 
 ## 6. Non-Functional Considerations
 

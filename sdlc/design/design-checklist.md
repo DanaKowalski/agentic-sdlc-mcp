@@ -2,6 +2,13 @@
 
 Use this checklist before starting implementation.
 
+## PRD Validation
+
+- [ ] Problem statement is present and unambiguous
+- [ ] Success metrics are defined and measurable
+- [ ] User stories have acceptance criteria
+- [ ] Scope boundaries (in/out of scope) are explicitly stated
+
 ## Core Deliverables
 - [ ] Architecture Decision Records (ADRs) created for major decisions
 - [ ] Technical Design document completed (if needed)
@@ -19,6 +26,8 @@ Use this checklist before starting implementation.
 - [ ] Implementation tasks can be clearly broken down
 - [ ] Team understands the technical approach
 - [ ] Design phase is approved
+- [ ] ADR threshold evaluated for every major decision area (data model, API surface, auth, integrations, performance trade-offs)
+- [ ] Phase gate: approved by [name] before implementation begins
 
 **Date Completed:** 
 **Approved by:** 

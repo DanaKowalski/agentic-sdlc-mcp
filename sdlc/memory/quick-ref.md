@@ -1,100 +1,75 @@
 # SDLC quick reference
 
-Read this at session start. One page. Everything you need to orient before doing any work.
+Read this at session start. Scannable in under 60 seconds.
 
 ---
 
-## Session sequence
+## Session open
 
-**OPEN:**
-1. Read this file
-2. Read `docs/memory/project-state.md` (create it if it does not exist)
+1. Read `sdlc/memory/quick-ref.md` (this file)
+2. Read `docs/memory/project-state.md` — create it if it does not exist
 3. Tell user current state and ask where to pick up
 
-**CLOSE:**
-1. Update `docs/memory/project-state.md`
-2. git add docs/memory/
-3. git commit -m "docs(memory): update project state - <one word describing session>"
-4. git push
+## Session close
 
-Memory is mandatory. Never start real work without it.
-
----
-
-## SDLC phases
-
-| Phase        | Entry condition                  | Key outputs                          | Main command / Agent          |
-|--------------|----------------------------------|--------------------------------------|-------------------------------|
-| Planning     | New feature or project           | PRD + checklist                      | `/generate_prd`               |
-| Design       | Approved PRD                     | Technical Design + ADRs + checklist  | `/create_technical_design` or Design Agent |
-| Implementation | Design complete                | Feature branch + tests               | Implementation Agent          |
-| Testing      | Code complete                    | Test plan + results                  | `/gen_test_plan`              |
-| Deployment   | Tests pass                       | Release notes                        | `/release_notes`              |
+1. Update `docs/memory/project-state.md` with phase, open tasks, and any blocks
+2. `git add docs/ && git commit -m "docs(memory): update project state - <slug>"`
+3. `git push`
 
 ---
 
 ## Available commands
 
-| Command                    | What it produces                     |
-|----------------------------|--------------------------------------|
-| `/generate_prd`            | PRD document                         |
-| `/create_technical_design` | Full design phase suite              |
-| `/create_adr`              | Single Architecture Decision Record  |
-| `/plan_sprint`             | Sprint plan                          |
-| `/gen_test_plan`           | Test plan                            |
-| `/release_notes`           | Release notes                        |
+| Command | What it produces |
+|---------|-----------------|
+| `/generate_prd` | PRD document |
+| `/create_technical_design` | Full design suite (TDD + ADRs + checklist) |
+| `/create_adr` | Single Architecture Decision Record |
+| `/plan_sprint` | Sprint plan |
+| `/gen_test_plan` | Test plan scaffold |
+| `/release_notes` | Release notes draft from git log |
+| `/project_setup` | Initial project scaffolding |
 
 ---
 
-## Agent spawn triggers (default behavior)
+## Agent spawn triggers
 
-- **Trigger 0 — Design Phase**: Approved PRD + architectural decisions needed → spawn Design Agent
-- **Trigger 1**: Unknown codebase + task needs code knowledge → Research Agent
+- **Trigger 0**: Approved PRD + architectural decisions exist → Design Agent
+- **Trigger 1**: Codebase not read this session → Research Agent
 - **Trigger 2**: Task touches >3 unread files → Research Agent
-- **Trigger 3**: Task has 2+ independent units → Parallel Implementation Agents
-- **Trigger 4**: Destructive or high-risk work → Isolated Implementation Agent
-- **Trigger 5**: Implementation complete → Review Agent
+- **Trigger 3**: 2+ independent work units → Parallel Implementation Agents
+- **Trigger 4**: Destructive or high-risk change → Isolated Implementation Agent
+- **Trigger 5**: Implementation done → Review Agent
+
+Priority order if multiple triggers active: 0 → 4 → 1 → 2 → 3 → 5
 
 ---
 
 ## Agent roles
 
-| Agent          | Primary job                        | Must not do                  |
-|----------------|------------------------------------|------------------------------|
-| Research       | Explore and report                 | Write source code            |
-| Design         | Create technical design + ADRs     | Write source code            |
-| Implementation | Execute bounded coding tasks       | Expand scope, skip tests     |
-| Review         | Verify work and give verdict       | Fix code                     |
-
-All agent outputs go to `docs/agents/<date>-<role>-<slug>.md` and must be committed immediately.
+| Agent | One-line job |
+|-------|-------------|
+| Research | Explore codebase and report findings — does not write code |
+| Design | Turn approved PRD into TDD + ADRs + checklist — does not write source code |
+| Implementation | Execute a bounded coding task within a defined file allowlist |
+| Review | Verify implementation against standards and acceptance criteria — does not fix code |
 
 ---
 
-## Review Verdicts
+## Memory file locations
 
-| Verdict              | Meaning                              | Next action |
-|----------------------|--------------------------------------|-------------|
-| `approved`           | All criteria met                     | Proceed and commit |
-| `approved-with-notes`| Criteria met, minor issues           | Proceed, fix notes before next PR |
-| `blocked`            | Criteria not met or serious issue    | Re-spawn implementation agent with review as context. Do not bypass. |
-
----
-
-## Key file locations
-
-| File                            | Purpose |
-|---------------------------------|---------|
-| `AGENTS.md`                     | Core agent rules |
-| `sdlc/overview.md`              | Full SDLC phases and rules |
-| `sdlc/agents/orchestrator.md`   | Orchestrator + spawn triggers |
-| `docs/memory/project-state.md`  | Live project state |
-| `docs/agents/`                  | All agent outputs |
+| File | Purpose |
+|------|---------|
+| `sdlc/memory/quick-ref.md` | This file — session orientation |
+| `docs/memory/project-state.md` | Live project state (phase, open tasks, blocks) |
+| `docs/agents/<date>-<role>-<slug>.md` | All agent outputs |
 
 ---
 
-## What not to do
+## Hard rules
 
-- Do not invent library APIs — always use Context7
-- Do not store state in chat — always write to `docs/memory/`
-- Do not skip the review agent
-- Do not commit directly to `main`
+- All agent output goes to `docs/agents/` as a written file — verbal output does not count
+- Commit every agent output before spawning the next agent
+- Never bypass a `blocked` verdict — surface to user and wait for instruction
+- Never start implementation before design phase is `status: complete` (if Trigger 0 applied)
+- Only orchestrators commit — subagents write files, orchestrator commits them
