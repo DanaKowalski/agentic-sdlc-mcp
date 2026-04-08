@@ -38,6 +38,7 @@ One primary export per file. Keep files under ~200 lines — split if larger. Co
 - Export types explicitly — do not rely on type inference leaking through re-exports
 - `async`/`await` over raw Promises
 - Handle errors explicitly — no silent catches
+- All exported functions must have explicit return types
 
 | Thing | Convention | Example |
 |-------|-----------|---------|
@@ -97,6 +98,10 @@ One primary export per file. Keep files under ~200 lines — split if larger. Co
 - Do not leave commented-out code in committed files
 
 ---
+
+## Logging
+- No `console.log` in production code — use a named logger
+- `console.log` is acceptable only in one-off scripts never imported by other modules
 
 ## Testing
 
