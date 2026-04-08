@@ -55,7 +55,7 @@ use the templates directly instead.
 | `/create_adr` | Fetch and follow `sdlc/design/architecture-decision-record-template.md` |
 | `/plan_sprint` | No template yet — describe sprint goals in `docs/planning/` |
 | `/gen_test_plan` | Fetch and follow `sdlc/testing/README.md` |
-| `/release_notes` | Draft from git log manually |
+| `/release_notes` | Fetch and follow `sdlc/deployment/release-notes-guide.md` |
 
 ## Subagent system
 
@@ -89,7 +89,7 @@ Full rules: fetch `sdlc/agents/orchestrator.md`
 ### Planning phase
 - `sdlc/overview.md` — all SDLC phase definitions and rules
 - `sdlc/planning/README.md` — planning phase workflow
-- `sdlc/planning/PRD-template.md` — PRD template
+- `sdlc/planning/PRD-template.md` — PRD template (includes required deployment decision in Section 6)
 - `sdlc/planning/planning-checklist.md` — planning phase checklist
 - `sdlc/planning/user-story-guidelines.md` — user story and acceptance criteria guidelines
 
@@ -113,6 +113,12 @@ Full rules: fetch `sdlc/agents/orchestrator.md`
 - `sdlc/testing/test-plan-template.md` — test plan template (copy to docs/testing/ per release)
 - `sdlc/testing/qa-checklist.md` — QA checklist to complete before deployment
 - `sdlc/testing/regression-testing-guide.md` — when and how to run regression tests
+
+### Deployment phase
+- `sdlc/deployment/README.md` — phase entry point; read PRD Section 6 first to determine if deployment applies
+- `sdlc/deployment/deployment-checklist.md` — per-release checklist (lightweight and full tiers)
+- `sdlc/deployment/rollback-procedure.md` — when and how to roll back a bad release
+- `sdlc/deployment/release-notes-guide.md` — how to produce and publish release notes
 
 ### Maintenance phase
 - `sdlc/maintenance/README.md` — maintenance phase overview and cadence table

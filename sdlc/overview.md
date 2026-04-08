@@ -10,13 +10,14 @@ This document defines the software development lifecycle phases, rules, and conv
 
 Entry point for all new features and projects.
 
-**Deliverables:** PRD, user stories with acceptance criteria
+**Deliverables:** PRD (including deployment decision), user stories with acceptance criteria
 **Templates:** `sdlc/planning/`
 **Command:** `/generate_prd`
 
 A feature does not move to design until it has:
 - An approved PRD with clear problem statement and success metrics
 - User stories broken into estimable units with acceptance criteria
+- A completed deployment decision in PRD Section 6 (Yes / No / Not yet decided)
 - Completed planning checklist
 
 ### 2. Design
@@ -52,13 +53,18 @@ Testing begins when implementation is merged to `main` and all review agent verd
 
 ### 5. Deployment
 
-Shipping to production safely.
+Shipping a release to its target environment.
 
-**Deliverables:** Release notes, CI/CD checklist, rollback procedure
+**Deliverables:** Release notes, completed deployment checklist, rollback procedure reviewed
 **Templates:** `sdlc/deployment/`
 **Command:** `/release_notes`
 
-No direct pushes to production. All releases go through CI.
+**Before starting this phase, read PRD Section 6 (Deployment Decision):**
+- If the decision is **No** — this project does not deploy. Skip this phase, document the skip in `docs/memory/project-state.md`, and move to operations or maintenance.
+- If the decision is **Not yet decided** — stop. Resolve the deployment decision before proceeding.
+- If the decision is **Yes** — proceed using `sdlc/deployment/README.md`.
+
+The deployment checklist has two tiers: lightweight for informal/continuous deployment, and full for structured releases with CI, staging, and approval gates. The PRD release model field determines which applies.
 
 ### 6. Operations
 
